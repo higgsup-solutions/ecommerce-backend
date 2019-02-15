@@ -59,25 +59,25 @@ For Lombok plugin installing: https://projectlombok.org/setup/intellij
 
 In this project, we divided source code into 8 packages.
 
-* **com.higgsup.base.common**
+* **com.higgsup.xshop.common**
 
     Defined global enumeration, utilizes, etc. for application  
 
-* **com.higgsup.base.controller**
+* **com.higgsup.xshop.controller**
 
     Defined controllers base on RESTful for application
 
-* **com.higgsup.base.dto**
+* **com.higgsup.xshop.dto**
     
     Defined Data Transfer Object for controllers.
     
-    In this package, we had sub-package **com.higgsup.base.dto.base** to defined interfaces for DTO, all of DTO classes will implement interfaces in this package.  
+    In this package, we had sub-package **com.higgsup.xshop.dto.base** to defined interfaces for DTO, all of DTO classes will implement interfaces in this package.  
 
-* **com.higgsup.base.entity**
+* **com.higgsup.xshop.entity**
     
     Defined POJO, which mapping to tables in database 
 
-* **com.higgsup.base.locale**
+* **com.higgsup.xshop.locale**
 
     Defined utility for internationalization.
     
@@ -85,7 +85,7 @@ In this project, we divided source code into 8 packages.
     
     https://blog.usejournal.com/spring-boot-rest-internationalization-9ab3fce2489 
 
-* **com.higgsup.base.repository**
+* **com.higgsup.xshop.repository**
 
     Defined interfaces which manipulate with database, interfaces extended from JpaRepository 
     
@@ -95,7 +95,7 @@ In this project, we divided source code into 8 packages.
     
     https://dzone.com/articles/spring-boot-jpa-hibernate-oracle
 
-* **com.higgsup.base.security**
+* **com.higgsup.xshop.security**
 
     Application security configuration base on JWT standard (JSON Web Token)
     
@@ -109,7 +109,7 @@ In this project, we divided source code into 8 packages.
     
     https://github.com/svlada/springboot-security-jwt
 
-* **com.higgsup.base.service**
+* **com.higgsup.xshop.service**
     
     Defined services to executed business logic 
 
@@ -153,9 +153,9 @@ All of Repository interfaces must have suffix *Repository and extend from JpaRep
 
    `Example: UserRepository.java`
    
-For package **com.higgsup.base.service**
+For package **com.higgsup.xshop.service**
 
-All interface will follow interface naming rule and implementation classes must put into **com.higgsup.base.service.impl** package with suffix *Service.
+All interface will follow interface naming rule and implementation classes must put into **com.higgsup.xshop.service.impl** package with suffix *Service.
 
 ## Version Control 
 
@@ -430,7 +430,7 @@ In this project, we had been used library Log4j 2  for logging purpose.
 ### Handling Exception
 In this project, we used `@ControllerAdvice` as a solution for handling exception
 
-We defined execution logic in package **com.higgsup.base.exception**
+We defined execution logic in package **com.higgsup.xshop.exception**
 
 We had declared class `BusinessException` to defined exceptions related to business.
 
