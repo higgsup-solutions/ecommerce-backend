@@ -7,8 +7,8 @@
         </Console>
 
         <RollingFile name="RollingFileError"
-                     fileName="./logs/xshop-logger-error.log"
-                     filePattern="./logs/$${date:yyyy-MM}/xshop-logger-%d{-dd-MMMM-yyyy}-%i.zip">
+                     fileName="./logs/xshop-error.log"
+                     filePattern="./logs/$${date:yyyy-MM}/xshop-%d{-dd-MMMM-yyyy}-%i.zip">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
@@ -24,8 +24,8 @@
         </RollingFile>
 
         <RollingFile name="RollingFile"
-                     fileName="./logs/xshop-logger-log4j2.log"
-                     filePattern="./logs/$${date:yyyy-MM}/xshop-logger-%d{-dd-MMMM-yyyy}-%i.zip">
+                     fileName="./logs/xshop.log"
+                     filePattern="./logs/$${date:yyyy-MM}/xshop-%d{-dd-MMMM-yyyy}-%i.zip">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
