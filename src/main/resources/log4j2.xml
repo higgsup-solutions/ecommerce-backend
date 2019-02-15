@@ -47,7 +47,7 @@
             <AppenderRef ref="RollingFile" />
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="com.higgsup.base" level="error">
+        <Logger name="com.higgsup.xshop" level="error">
             <AppenderRef ref="RollingFileError"/>
         </Logger>
 

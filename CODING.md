@@ -5,11 +5,11 @@ A step by step series of examples that tell you how to coding basically
 
 We will take care mainly in 5 packages to complete a full flow
 
-* com.higgsup.base.dto 
-* com.higgsup.base.entity 
-* com.higgsup.base.repository
-* com.higgsup.base.service
-* com.higgsup.base.controller
+* com.higgsup.xshop.dto 
+* com.higgsup.xshop.entity 
+* com.higgsup.xshop.repository
+* com.higgsup.xshop.service
+* com.higgsup.xshop.controller
 
 In this documentation, we will follow managing user flow
 
@@ -17,10 +17,10 @@ In this documentation, we will follow managing user flow
 
 We must defined entity (model) User to mapping with table in database
 
-Entity classes will define in package **com.higgsup.base.entity**
+Entity classes will define in package **com.higgsup.xshop.entity**
 
 ```Java
-package com.higgsup.base.entity;
+package com.higgsup.xshop.entity;
 import lombok.Data;
 
 @Entity // mark that this is an entity class
@@ -55,12 +55,12 @@ public class User {
 
 ###Second step
 
-DTO classes (Data Transfer Object) were defined in **com.higgsup.base.dto**
+DTO classes (Data Transfer Object) were defined in **com.higgsup.xshop.dto**
 
 ```Java 
 //Purpose of this DTO is map with attributes in request from client
  
-package com.higgsup.base.dto;
+package com.higgsup.xshop.dto;
 
 import lombok.Data;
 
@@ -75,10 +75,10 @@ public class UserDTO {
 ```Java 
 //Purpose of this DTO is map with attributes will be returned from server after business logic execution 
 
-package com.higgsup.base.dto;
+package com.higgsup.xshop.dto;
 
-import com.higgsup.base.dto.base.IPagedResponse;
-import com.higgsup.base.entity.User;
+import com.higgsup.xshop.dto.base.IPagedResponse;
+import com.higgsup.xshop.entity.User;
 
 import java.util.List;
 
@@ -89,14 +89,14 @@ public class DemoDTO extends IPagedResponse<List<User>> {
 
 * **Note**
 
-All response DTO classes will be extended from abstract class `IPagedReponse` in package **com.higgsup.base.dto.base**
+All response DTO classes will be extended from abstract class `IPagedReponse` in package **com.higgsup.xshop.dto.base**
 ###Third step
-Define Repository in package **com.higgsup.base.repository**
+Define Repository in package **com.higgsup.xshop.repository**
 
 All files are Interface and extend from JpaRepository<T, ID>
 
 ```Java
-package com.higgsup.base.repository;
+package com.higgsup.xshop.repository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -123,13 +123,13 @@ https://dzone.com/articles/spring-boot-jpa-hibernate-oracle
 ###Fourth step
 Define Service to execute business logic
 
-We will define Interface for service in package **com.higgsup.base.service**
+We will define Interface for service in package **com.higgsup.xshop.service**
 
 ```Java
-package com.higgsup.base.service;
+package com.higgsup.xshop.service;
 
-import com.higgsup.base.dto.UserDTO;
-import com.higgsup.base.entity.User;
+import com.higgsup.xshop.dto.UserDTO;
+import com.higgsup.xshop.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -146,7 +146,7 @@ public interface IUserService {
 Service classes will put into sub-package **impl** and implement from corresponding interfaces which had been defined
 ```Java
 
-package com.higgsup.base.service.impl;
+package com.higgsup.xshop.service.impl;
 
 ...
 
@@ -199,10 +199,10 @@ public class UserService implements IUserService {
 ```
 
 ###Fifth step
-Controller classes must be defined in package **com.higgsup.base.controller**
+Controller classes must be defined in package **com.higgsup.xshop.controller**
 
 ```Java
-package com.higgsup.base.controller;
+package com.higgsup.xshop.controller;
 
 import ...
 
