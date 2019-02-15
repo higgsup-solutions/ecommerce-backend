@@ -2,6 +2,7 @@ package com.higgsup.base.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.base.common.ApplicationSecurityProperty;
+import com.higgsup.base.security.CustomCorsFilter;
 import com.higgsup.base.security.RestAuthenticationEntryPoint;
 import com.higgsup.base.security.auth.ajax.AjaxAuthenticationProvider;
 import com.higgsup.base.security.auth.ajax.AjaxLoginProcessingFilter;
@@ -24,7 +25,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
@@ -79,22 +79,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowCredentials(true);
-    config.setAllowedOrigins(Arrays
-        .asList(applicationSecurityProperty.getCors().getAllowedOrigin()));
-    config.addAllowedHeader(
-        applicationSecurityProperty.getCors().getAllowedHeader());
-    config.setMaxAge(applicationSecurityProperty.getCors().getMaxAge());
-    config.setAllowedMethods(Arrays
-        .asList(applicationSecurityProperty.getCors().getAllowedMethod()));
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/api/**", config);
-    return source;
-  }
-
   protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(
       String loginEntryPoint) throws Exception {
     AjaxLoginProcessingFilter filter = new AjaxLoginProcessingFilter(
@@ -112,6 +96,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         tokenExtractor, matcher);
     filter.setAuthenticationManager(this.authenticationManager);
     return filter;
+  }
+
+  protected CustomCorsFilter buildCustomCorsFilter() {
+
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowCredentials(true);
+    config.setAllowedOrigins(Arrays
+        .asList(applicationSecurityProperty.getCors().getAllowedOrigin()));
+    config.addAllowedHeader(
+        applicationSecurityProperty.getCors().getAllowedHeader());
+    config.setMaxAge(applicationSecurityProperty.getCors().getMaxAge());
+    config.setAllowedMethods(Arrays
+        .asList(applicationSecurityProperty.getCors().getAllowedMethod()));
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/api/**", config);
+
+    return new CustomCorsFilter(source);
   }
 
   @Bean
@@ -153,6 +154,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(API_ROOT_URL).authenticated()
         .and()
+        .addFilterBefore(buildCustomCorsFilter(),
+            UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(buildAjaxLoginProcessingFilter(AUTHENTICATION_URL),
             UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(
