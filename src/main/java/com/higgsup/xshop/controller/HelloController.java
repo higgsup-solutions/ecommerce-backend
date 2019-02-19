@@ -46,7 +46,7 @@ public class HelloController {
   @PostMapping("/create")
   public ResponseEntity<UserDTO> create(
       @RequestBody UserDTO userDTO) {
-    userService.createUser(userDTO);
+    //    userService.createUser(userDTO);
     return ResponseEntity.ok(userDTO);
   }
 
@@ -55,7 +55,7 @@ public class HelloController {
   public DemoDTO getUser(HttpServletRequest request) {
     DemoDTO demoDTO = new DemoDTO();
     ResponseMessage<List<User>> responseMessage = new ResponseMessage<>();
-    responseMessage.setData(userService.getUser());
+    //    responseMessage.setData(userService.getUser());
     responseMessage.setStatus(HttpStatus.OK.getReasonPhrase());
     demoDTO.setResponseMessage(responseMessage);
     return demoDTO;

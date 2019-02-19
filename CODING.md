@@ -158,15 +158,15 @@ public class UserService implements IUserService {
 
   private final PasswordEncoder passwordEncoder;
 
-  private final UserRoleRepository userRoleRepository;
+  private final UserRoleRepository roleRepository;
 
   // Inject bean throught constructor
   public UserService(UserRepository userRepository,
       PasswordEncoder passwordEncoder,
-      UserRoleRepository userRoleRepository) {
+      UserRoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
-    this.userRoleRepository = userRoleRepository;
+    this.roleRepository = roleRepository;
   }
 
   @Override
@@ -192,7 +192,7 @@ public class UserService implements IUserService {
     userRole.setRole(Role.MEMBER);
     userRole.setUserId(user.getId());
     roles.add(userRole);
-    userRoleRepository.saveAll(roles);
+    roleRepository.saveAll(roles);
     throw new BusinessException(ErrorCode.GLOBAL, "Test business exception...");
   }
 }

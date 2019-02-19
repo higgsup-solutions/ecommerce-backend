@@ -17,8 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author vladimir.stankovic
@@ -43,29 +43,28 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
       AuthenticationException {
     Assert.notNull(authentication, "No authentication data provided");
 
-    String username = (String) authentication.getPrincipal();
+    String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
 
-    User user = userService.getByUsername(username);
+    User user = userService.getByEmail(email);
     if (user == null)
-      throw new UsernameNotFoundException("User not found: " + username);
+      throw new UsernameNotFoundException("User not found: " + email);
 
     if (!encoder.matches(password, user.getPassword())) {
       throw new BadCredentialsException(
           "Authentication Failed. Username or Password not valid.");
     }
-
-    if (user.getRoles() == null)
+    if (user.getRole() == null)
       throw new InsufficientAuthenticationException(
           "User has no roles assigned");
 
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(authority -> new SimpleGrantedAuthority(
-            authority.getRole().authority()))
-        .collect(Collectors.toList());
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+        user.getRole().authority());
+    authorities.add(authority);
 
     UserContext userContext = UserContext
-        .create(user.getId(), user.getUsername(), authorities);
+        .create(user.getId(), user.getEmail(), authorities);
 
     return new UsernamePasswordAuthenticationToken(userContext, null,
         userContext.getAuthorities());

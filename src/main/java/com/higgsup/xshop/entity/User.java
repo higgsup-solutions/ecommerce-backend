@@ -1,43 +1,53 @@
 package com.higgsup.xshop.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name="APP_USER")
+@Table(name = "USER")
 @Data
 public class User {
     @Id
     @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
-    @Column(name="username")
-    private String username;
-    
-    @Column(name="password")
+    private Integer id;
+
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+
+    @Column(name = "LAST_NAME")
+    private String lastName;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "PASSWORD")
     private String password;
-    
-    @OneToMany
-    @JoinColumn(name="APP_USER_ID", referencedColumnName="ID")
-    private List<UserRole> roles;
-    
-    public User() { }
-    
-    public User(Long id, String username, String password, List<UserRole> roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
+
+  @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
+    private Role role;
+
+    @Column(name = "CREATED_DATE")
+    @CreationTimestamp
+    private Timestamp createdDate;
+
+    @Column(name = "UPDATED_DATE")
+    @CreationTimestamp
+    private Timestamp updatedDate;
+
+    @Column(name = "VERSION")
+    private Integer version;
 
 }
