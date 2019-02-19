@@ -1,6 +1,7 @@
 package com.higgsup.xshop.security.auth.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.higgsup.xshop.common.TokenType;
 import com.higgsup.xshop.entity.UserToken;
 import com.higgsup.xshop.security.model.UserContext;
 import com.higgsup.xshop.security.model.token.JwtToken;
@@ -19,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,11 +57,21 @@ public class AjaxAwareAuthenticationSuccessHandler implements
         JwtToken accessToken = tokenFactory.createAccessJwtToken(userContext);
         JwtToken refreshToken = tokenFactory.createRefreshToken(userContext);
 
-        UserToken userToken = new UserToken();
-        userToken.setUserId(userContext.getUserId());
-        userToken.setToken(accessToken.getToken());
-        userToken.setRefreshToken(refreshToken.getToken());
-        userTokenService.save(userToken);
+        List<UserToken> userTokens = new ArrayList<>();
+
+        UserToken accessTokenEntity = new UserToken();
+        accessTokenEntity.setUserId(userContext.getUserId());
+        accessTokenEntity.setToken(accessToken.getToken());
+        accessTokenEntity.setType(TokenType.ACCESS);
+        userTokens.add(accessTokenEntity);
+
+        UserToken refreshTokenEntity = new UserToken();
+        refreshTokenEntity.setUserId(userContext.getUserId());
+        refreshTokenEntity.setToken(refreshToken.getToken());
+        refreshTokenEntity.setType(TokenType.REFRESH);
+        userTokens.add(refreshTokenEntity);
+
+        userTokenService.saveAll(userTokens);
 
         Map<String, String> tokenMap = new HashMap<String, String>();
         tokenMap.put("token", accessToken.getToken());

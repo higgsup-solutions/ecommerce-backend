@@ -1,6 +1,8 @@
 package com.higgsup.xshop.security.endpoint;
 
 import com.higgsup.xshop.common.ApplicationSecurityProperty;
+import com.higgsup.xshop.common.TokenType;
+import com.higgsup.xshop.entity.Role;
 import com.higgsup.xshop.entity.User;
 import com.higgsup.xshop.entity.UserToken;
 import com.higgsup.xshop.security.auth.ajax.LoginRequest;
@@ -34,8 +36,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * RefreshTokenEndpoint
@@ -87,24 +89,28 @@ public class TokenEndpoint {
         }
 
         String subject = refreshToken.getSubject();
-        User user = userService.getByUsername(subject);
+        User user = userService.getByEmail(subject);
         if (user == null)
             throw new UsernameNotFoundException("User not found: " + subject);
+        Role role = user.getRole();
+        if (role == null)
+            throw new InsufficientAuthenticationException(
+                "User has no roles assigned");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(
+            role.authority());
+        authorities.add(simpleGrantedAuthority);
 
-        if (user.getRoles() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getRole().authority()))
-                .collect(Collectors.toList());
-
-        UserContext userContext = UserContext.create(user.getId(), user.getUsername(), authorities);
+        UserContext userContext = UserContext
+            .create(user.getId(), user.getEmail(), authorities);
 
         AccessJwtToken accessJwtToken = tokenFactory.createAccessJwtToken(userContext);
 
-        UserToken userToken = new UserToken();
-        userToken.setUserId(user.getId());
-        userToken.setToken(accessJwtToken.getToken());
-        userToken.setRefreshToken(tokenPayload);
-        userTokenService.save(userToken);
+        UserToken accessToken = userTokenService
+            .findByUserIdAndType(user.getId(), TokenType.ACCESS);
+        accessToken.setToken(accessJwtToken.getToken());
+
+        userTokenService.save(accessToken);
 
         return accessJwtToken;
     }
@@ -117,7 +123,7 @@ public class TokenEndpoint {
             Jws<Claims> jwsClaims = rawToken.parseClaims(applicationSecurityProperty.getJwt().getTokenSigningKey());
             String id = jwsClaims.getBody().getId();
             if(accessTokenVerifier.verify(id, tokenPayload)) {
-                userTokenService.delete(Long.valueOf(id));
+                userTokenService.deleteByUserId(Integer.valueOf(id));
             }
         } catch (BadCredentialsException | JwtExpiredTokenException ex) {
             return ResponseEntity.ok().build();

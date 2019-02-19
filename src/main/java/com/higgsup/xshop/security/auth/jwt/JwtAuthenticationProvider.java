@@ -52,7 +52,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             throw new InvalidJwtToken();
         }
 
-        UserContext context = UserContext.create(Long.valueOf(id), subject, authorities);
+        UserContext context = UserContext
+            .create(Integer.valueOf(id), subject, authorities);
 
         return new JwtAuthenticationToken(context, context.getAuthorities());
     }

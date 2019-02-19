@@ -6,23 +6,24 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 public class UserContext {
-    private final Long userId;
+    private final Integer userId;
     private final String username;
     private final List<GrantedAuthority> authorities;
 
-    private UserContext(Long userId, String username,
+    private UserContext(Integer userId, String username,
         List<GrantedAuthority> authorities) {
         this.userId = userId;
         this.username = username;
         this.authorities = authorities;
     }
-    
-    public static UserContext create(Long userId, String username, List<GrantedAuthority> authorities) {
+
+    public static UserContext create(Integer userId, String username,
+        List<GrantedAuthority> authorities) {
         if (StringUtils.isEmpty(username)) throw new IllegalArgumentException("Username is blank: " + username);
         return new UserContext(userId, username, authorities);
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

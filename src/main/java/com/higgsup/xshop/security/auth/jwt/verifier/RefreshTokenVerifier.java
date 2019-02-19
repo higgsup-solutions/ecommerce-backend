@@ -1,10 +1,9 @@
 package com.higgsup.xshop.security.auth.jwt.verifier;
 
+import com.higgsup.xshop.common.TokenType;
 import com.higgsup.xshop.entity.UserToken;
 import com.higgsup.xshop.repository.UserTokenRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * BloomFilterTokenVerifier
@@ -25,9 +24,8 @@ public class RefreshTokenVerifier implements TokenVerifier {
 
     @Override
     public boolean verify(String userId, String refreshToken) {
-        Optional<UserToken> userToken = userTokenRepository.findById(Long.valueOf(userId));
-        return userToken.map(
-            uToken -> uToken.getRefreshToken().equals(refreshToken))
-            .orElse(false);
+        UserToken userToken = userTokenRepository
+            .findByUserIdAndType(Integer.valueOf(userId), TokenType.REFRESH);
+        return userToken != null && userToken.getToken().equals(refreshToken);
     }
 }

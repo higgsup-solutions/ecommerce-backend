@@ -49,12 +49,14 @@ public class AjaxLoginProcessingFilter extends
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
         LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
-        
-        if (StringUtils.isEmpty(loginRequest.getUsername()) || StringUtils.isEmpty(loginRequest.getPassword())) {
+
+        if (StringUtils.isEmpty(loginRequest.getEmail()) || StringUtils
+            .isEmpty(loginRequest.getPassword())) {
             throw new AuthenticationServiceException("Username or Password not provided");
         }
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+            loginRequest.getEmail(), loginRequest.getPassword());
 
         return this.getAuthenticationManager().authenticate(token);
     }

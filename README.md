@@ -244,14 +244,14 @@ public class UserService implements IUserService {
 
   private final PasswordEncoder passwordEncoder;
 
-  private final UserRoleRepository userRoleRepository;
+  private final UserRoleRepository roleRepository;
 
   public UserService(UserRepository userRepository,
       PasswordEncoder passwordEncoder,
-      UserRoleRepository userRoleRepository) {
+      UserRoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
-    this.userRoleRepository = userRoleRepository;
+    this.roleRepository = roleRepository;
   }
 
   
@@ -268,7 +268,7 @@ public class UserService implements IUserService {
     userRole.setRole(Role.MEMBER);
     userRole.setUserId(user.getId());
     roles.add(userRole);
-    userRoleRepository.saveAll(roles);
+    roleRepository.saveAll(roles);
     throw new BusinessException(ErrorCode.GLOBAL, "Test business exception...");
   }
 }
@@ -336,7 +336,7 @@ public class UserRoleService implements IUserRoleService {
  @Override
  @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW) //New transaction
  public void create(UserRole userRole) {
-   userRoleRepository.save(userRole);
+   roleRepository.save(userRole);
  }
  
 }
