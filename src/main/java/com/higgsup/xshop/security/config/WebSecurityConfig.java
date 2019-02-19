@@ -42,7 +42,7 @@ import java.util.List;
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "higgsup.security.config")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-  public static final String AUTHENTICATION_HEADER_NAME = "X-Authorization";
+  public static final String AUTHENTICATION_HEADER_NAME = "Authorization";
 
   private static final String AUTHENTICATION_URL = "/api/auth/login";
 
