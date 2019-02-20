@@ -15,4 +15,8 @@ public class ProductDTO {
   private Float discountPercent;
 
   private String mailImgUrl;
+
+  private Float avgRating;
+
+  private Long totalRating;
 }
