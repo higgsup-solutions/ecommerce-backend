@@ -1,9 +1,8 @@
 package com.higgsup.xshop.controller;
 
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
-import com.higgsup.xshop.service.ICategoryService;
-import com.higgsup.xshop.service.IProductService;
 import com.higgsup.xshop.service.impl.ProductService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -28,15 +27,15 @@ public class ProductController {
     this.productService = productService;
   }
 
-  @GetMapping("/product/{id}")
-  public ResponseMessage getProductByCategoryId (
+  @GetMapping("/products/{id}")
+  public IPagedResponse getProductByCategoryId (
       @PathVariable("id") int id) {
-    ResponseMessage<List<ProductDTO>> response = new ResponseMessage<>();
+    IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>();
+    ResponseMessage<List<ProductDTO>> responseMessage = new ResponseMessage<>();
 
     List<ProductDTO> productDTOList = productService.getProductByCategoryId(id);
-
-    response.setData(productDTOList);
-
-   return response;
+    responseMessage.setData(productDTOList);
+    iPagedResponse.setResponseMessage(responseMessage);
+   return iPagedResponse;
   }
 }
