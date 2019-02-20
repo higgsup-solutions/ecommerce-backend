@@ -51,9 +51,27 @@ public class ProductService implements IProductService {
     List<ProductDTO> productDTOList = new ArrayList<>();
     Pageable pageRequest = PageRequest
         .of(0, 18, Sort.Direction.DESC, "discountPercent");
-    Category category = categoryService.getCategoryById(id);
+    List<Category> allCategoryList = categoryService.getAll();
+    Category categoryL1 = categoryService.getCategoryById(id);
+    List<Category> categoryListL2 = categoryService.getCategoryByParentId(categoryL1.getId());
+    List<Category> categoryListL3 = new ArrayList<>();
+
+    for (Category categoryL2 : categoryListL2) {
+      for (Category categoryL3 : allCategoryList) {
+        if (categoryL3.getParentId().equals(categoryL2.getId())){
+          categoryListL3.add(categoryL3);
+        }
+      }
+    }
+
+    List<Category> CategoryList = new ArrayList<>();
+
+    CategoryList.add(categoryL1);
+    CategoryList.addAll(categoryListL3);
+    CategoryList.addAll(categoryListL2);
+
     Page<Product> productList = productRepository
-        .findProductsByCategory(category, pageRequest);
+        .findProductsByCategory(categoryL1, pageRequest);
 
     for (Product product : productList.getContent()) {
       ProductDTO productDTO = new ProductDTO();
