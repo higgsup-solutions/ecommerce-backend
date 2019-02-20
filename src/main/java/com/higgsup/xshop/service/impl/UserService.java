@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 public class UserService implements IUserService {
 
   private final UserRepository userRepository;
@@ -33,6 +32,7 @@ public class UserService implements IUserService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public User getByEmail(String email) {
     return userRepository.findByEmail(email).orElse(null);
   }
