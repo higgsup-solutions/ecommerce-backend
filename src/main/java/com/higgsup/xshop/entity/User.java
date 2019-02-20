@@ -35,19 +35,19 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
-    private Role role;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
+  private Role role;
 
-    @Column(name = "CREATED_DATE")
-    @CreationTimestamp
-    private Timestamp createdDate;
+  @Column(name = "CREATED_DATE")
+  @CreationTimestamp
+  private Timestamp createdDate;
 
-    @Column(name = "UPDATED_DATE")
-    @CreationTimestamp
-    private Timestamp updatedDate;
+  @Column(name = "UPDATED_DATE")
+  @CreationTimestamp
+  private Timestamp updatedDate;
 
-    @Column(name = "VERSION")
-    private Integer version;
+  @Column(name = "VERSION")
+  private Integer version;
 
 }

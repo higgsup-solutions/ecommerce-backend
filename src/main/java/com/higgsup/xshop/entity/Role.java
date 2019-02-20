@@ -27,6 +27,9 @@ public class Role {
   private UserRole role;
 
   public String authority() {
+    if (this.role == null) {
+      return "";
+    }
     return "ROLE_" + this.role.name();
   }
 }

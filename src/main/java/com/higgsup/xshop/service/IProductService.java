@@ -5,5 +5,6 @@ import com.higgsup.xshop.dto.ProductDTO;
 import java.util.List;
 
 public interface IProductService {
+  List<ProductDTO> getProductTopSale();
   List<ProductDTO> getProductByCategoryId(Integer id);
 }
