@@ -36,14 +36,15 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
+  @ApiOperation(value = "API get products by category", response = IPagedResponse.class)
   public IPagedResponse getProductByCategoryId (
       @PathVariable("id") int id) {
     IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>();
     ResponseMessage<List<ProductDTO>> responseMessage = new ResponseMessage<>();
-
     List<ProductDTO> productDTOList = productService.getProductByCategoryId(id);
     responseMessage.setData(productDTOList);
     iPagedResponse.setResponseMessage(responseMessage);
+    iPagedResponse.setTotalItem(productDTOList.size());
     return iPagedResponse;
   }
 }
