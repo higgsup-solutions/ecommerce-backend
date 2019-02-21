@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.higgsup</groupId>
-    <artifactId>base</artifactId>
+    <artifactId>xshop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>base</name>
-    <description>Base project for Spring Boot</description>
+    <name>xshop</name>
+    <description>xshop project for Spring Boot</description>
     <packaging>war</packaging>
 
     <properties>
