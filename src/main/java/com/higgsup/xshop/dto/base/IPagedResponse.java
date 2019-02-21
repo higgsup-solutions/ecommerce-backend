@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class IPagedResponse<T> {
-  private ResponseMessage<T> responseMessage;
+  private ResponseMessage<T> responseMessage = new ResponseMessage<>();
 
   private long totalItem;
   private int pageIndex;
