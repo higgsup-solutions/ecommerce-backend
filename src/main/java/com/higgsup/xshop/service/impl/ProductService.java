@@ -168,7 +168,7 @@ public class ProductService implements IProductService {
   }
 
   private boolean isEmptyCriteria(ProductCriteriaDTO criteria) {
-    if (StringUtils.isEmpty(criteria.getTextSearch())) {
+    if (!StringUtils.isEmpty(criteria.getTextSearch())) {
       return false;
     }
     if (criteria.getStatus() != null) {
