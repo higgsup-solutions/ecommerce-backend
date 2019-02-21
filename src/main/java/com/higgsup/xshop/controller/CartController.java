@@ -7,7 +7,13 @@ import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.ICartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/carts")
@@ -26,6 +32,16 @@ public class CartController {
     CartDTO responseCartDTO = cartService.updateCart(id, cartDTO.getAmount());
     responseMessage.setData(responseCartDTO);
     return responseMessage;
+  }
+
+  @GetMapping(value = "/total-item")
+  @ApiOperation(value = "API get total item of cart")
+  public IPagedResponse<Integer> getTotalItemCart() {
+    ResponseMessage<Integer> responseMessage = new ResponseMessage<>();
+    responseMessage.setData(cartService.totalItemCart());
+    IPagedResponse<Integer> response = new IPagedResponse<>();
+    response.setResponseMessage(responseMessage);
+    return response;
   }
 
   @PostMapping
