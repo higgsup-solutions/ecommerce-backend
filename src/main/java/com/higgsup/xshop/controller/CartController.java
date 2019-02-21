@@ -1,6 +1,8 @@
 package com.higgsup.xshop.controller;
 
+import com.higgsup.xshop.dto.CartAddDTO;
 import com.higgsup.xshop.dto.CartDTO;
+import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.ICartService;
 import io.swagger.annotations.Api;
@@ -24,5 +26,12 @@ public class CartController {
     CartDTO responseCartDTO = cartService.updateCart(id, cartDTO.getAmount());
     responseMessage.setData(responseCartDTO);
     return responseMessage;
+  }
+
+  @PostMapping
+  @ApiOperation(value = "API add product into cart", response = IPagedResponse.class)
+  public IPagedResponse addProduct(@RequestBody CartAddDTO cartAddDTO) {
+    cartService.addProduct(cartAddDTO);
+    return new IPagedResponse();
   }
 }

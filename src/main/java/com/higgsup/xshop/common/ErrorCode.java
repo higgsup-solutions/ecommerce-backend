@@ -13,8 +13,14 @@ public enum ErrorCode {
     GLOBAL(2, "System error"),
     VALIDATION(1, "Validation error"),
     AUTHENTICATION(10, "Authentication error"),
-    JWT_TOKEN_EXPIRED(11, "JWT token expired");
-    
+    JWT_TOKEN_EXPIRED(11, "JWT token expired"),
+
+  //Cart error
+  AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT(12,
+      "Amount product greater than available product"),
+
+  //Product error
+  PRODUCT_NOT_FOUND(13, "Product not found");
     private int errorCode;
     private String errorMessage;
 
