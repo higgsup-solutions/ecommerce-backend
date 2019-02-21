@@ -1,10 +1,13 @@
 package com.higgsup.xshop.entity;
 
+import com.higgsup.xshop.common.ProductStatus;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,7 +40,8 @@ public class Product {
   private String brandName;
 
   @Column(name = "STATUS")
-  private String status;
+  @Enumerated(EnumType.STRING)
+  private ProductStatus status;
 
   @Column(name = "WEIGHT")
   private Float weight;
@@ -53,6 +57,9 @@ public class Product {
 
   @Column(name = "AVG_RATING")
   private Float avgRating;
+
+  @Column(name = "TOTAL_RATING")
+  private Integer totalRating;
 
   @Column(name = "IMG_URL", columnDefinition = "TEXT")
   private String imgUrl;
