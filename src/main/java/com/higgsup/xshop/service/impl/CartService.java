@@ -8,6 +8,8 @@ import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.entity.User;
 import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.CartRepository;
+import com.higgsup.xshop.repository.ProductRepository;
+import com.higgsup.xshop.repository.UserRepository;
 import com.higgsup.xshop.security.model.UserContext;
 import com.higgsup.xshop.service.ICartService;
 import org.springframework.beans.BeanUtils;
