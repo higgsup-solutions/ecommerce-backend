@@ -1,6 +1,5 @@
 package com.higgsup.xshop.dto;
 
-import com.higgsup.xshop.entity.Product;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -11,7 +10,6 @@ public class ReviewDTO {
   private String reviewer;
   private Short rating;
   private String comment;
-  private Product product;
   private Timestamp createdDate;
   private Timestamp updatedDate;
 }
