@@ -132,6 +132,7 @@
     </dependencies>
 
     <build>
+        <finalName>xshop</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
