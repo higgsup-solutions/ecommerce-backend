@@ -89,11 +89,14 @@ public class ProductService implements IProductService {
 
     if (!StringUtils.isEmpty(criteria.getTextSearch())) {
       String textSearch = criteria.getTextSearch().trim();
-      textSearch = DataUtil.removeAccent(textSearch);
-      conditionWhere = Specification.where(conditionWhere).and(
-          buildCriteriaTextSearch(StringUtils.replace(textSearch, "d", "đ")))
+      textSearch = DataUtil.removeAccent(textSearch).toUpperCase();
+      conditionWhere = Specification.where(conditionWhere).and(Specification
+          .where(buildCriteriaTextSearch(
+              StringUtils.replace(textSearch, "D", "Đ")))
           .or(buildCriteriaTextSearch(
-              StringUtils.replace(textSearch, "đ", "d")));
+              StringUtils.replace(textSearch, "Đ", "D")))
+      )
+      ;
     }
 
     if (criteria.getAvgRating() != null) {
@@ -127,9 +130,9 @@ public class ProductService implements IProductService {
 
   private Specification<Product> buildCriteriaTextSearch(String textSearch) {
     return (root, query, cb) -> {
-      return cb.or(cb.like(root.get("name"), '%' + textSearch + '%'),
-          cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
-          cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
+      return cb.or(cb.like(cb.upper(root.get("name")), '%' + textSearch + '%'),
+          cb.like(cb.upper(root.get("shortDesc")), '%' + textSearch + '%'),
+          cb.like(cb.upper(root.get("fullDesc")), '%' + textSearch + '%'));
     };
   }
 
