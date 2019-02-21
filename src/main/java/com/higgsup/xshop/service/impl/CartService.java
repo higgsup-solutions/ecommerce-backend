@@ -23,10 +23,9 @@ import java.util.Optional;
 public class CartService implements ICartService {
 
   private final CartRepository cartRepository;
+  private final UserRepository userRepository;
 
   private final ProductRepository productRepository;
-
-  private final UserRepository userRepository;
 
   private final ValidationService validationService;
 
@@ -35,8 +34,8 @@ public class CartService implements ICartService {
       UserRepository userRepository,
       ValidationService validationService) {
     this.cartRepository = cartRepository;
-    this.productRepository = productRepository;
     this.userRepository = userRepository;
+    this.productRepository = productRepository;
     this.validationService = validationService;
   }
 
@@ -98,4 +97,13 @@ public class CartService implements ICartService {
     }
     return cartDTO;
   }
+
+  @Override
+  public Integer totalItemCart() {
+    UserContext userContext = (UserContext) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+    User user = userRepository.getOne(userContext.getUserId());
+    return cartRepository.countItemCartByUserId(user);
+  }
+
 }
