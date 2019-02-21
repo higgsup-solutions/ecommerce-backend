@@ -17,10 +17,7 @@ public class ValidationService {
 
   public boolean validate(Object obj) {
     Set<ConstraintViolation<Object>> validations = this.validator.validate(obj);
-    if (validations.size() > 0) {
-      return false;
-    }
-    return true;
+    return validations.size() <= 0;
   }
 
 }

@@ -2,7 +2,6 @@ package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.dto.CartAddDTO;
-import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.entity.Cart;
 import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.entity.User;
@@ -26,17 +25,21 @@ public class CartService implements ICartService {
 
   private final UserRepository userRepository;
 
+  private final ValidationService validationService;
+
   public CartService(CartRepository cartRepository,
       ProductRepository productRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      ValidationService validationService) {
     this.cartRepository = cartRepository;
     this.productRepository = productRepository;
     this.userRepository = userRepository;
+    this.validationService = validationService;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public ResponseMessage addProduct(CartAddDTO cartAddDTO) {
+  public void addProduct(CartAddDTO cartAddDTO) {
 
     UserContext userContext = (UserContext) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
@@ -70,11 +73,12 @@ public class CartService implements ICartService {
     }
 
     cartRepository.save(cart);
-
-    return new ResponseMessage();
   }
 
   private void validateProduct(CartAddDTO cartAddDTO) {
-
+    if (!validationService.validate(cartAddDTO)) {
+      throw new BusinessException(ErrorCode.VALIDATION,
+          ErrorCode.VALIDATION.getErrorMessage());
+    }
   }
 }
