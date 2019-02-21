@@ -59,16 +59,25 @@ public class AjaxAwareAuthenticationSuccessHandler implements
 
         List<UserToken> userTokens = new ArrayList<>();
 
-        UserToken accessTokenEntity = new UserToken();
-        accessTokenEntity.setUserId(userContext.getUserId());
+        UserToken accessTokenEntity = userTokenService
+            .findByUserIdAndType(userContext.getUserId(), TokenType.ACCESS);
+        if (accessTokenEntity == null) {
+            accessTokenEntity = new UserToken();
+            accessTokenEntity.setUserId(userContext.getUserId());
+            accessTokenEntity.setType(TokenType.ACCESS);
+        }
         accessTokenEntity.setToken(accessToken.getToken());
-        accessTokenEntity.setType(TokenType.ACCESS);
         userTokens.add(accessTokenEntity);
 
-        UserToken refreshTokenEntity = new UserToken();
-        refreshTokenEntity.setUserId(userContext.getUserId());
+        UserToken refreshTokenEntity = userTokenService
+            .findByUserIdAndType(userContext.getUserId(), TokenType.REFRESH);
+        if (refreshTokenEntity == null) {
+            refreshTokenEntity = new UserToken();
+            refreshTokenEntity.setUserId(userContext.getUserId());
+            refreshTokenEntity.setType(TokenType.REFRESH);
+        }
         refreshTokenEntity.setToken(refreshToken.getToken());
-        refreshTokenEntity.setType(TokenType.REFRESH);
+
         userTokens.add(refreshTokenEntity);
 
         userTokenService.saveAll(userTokens);
