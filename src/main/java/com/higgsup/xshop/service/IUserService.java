@@ -6,4 +6,6 @@ public interface IUserService {
 
   User getByEmail(String email);
 
+  User register(User user);
+
 }

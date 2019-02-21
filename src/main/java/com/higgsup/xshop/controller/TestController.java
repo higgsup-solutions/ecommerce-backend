@@ -31,19 +31,6 @@ public class TestController {
     return ResponseEntity.ok("OK");
   }
 
-  @GetMapping("/testBeanCopy")
-  public ResponseEntity<CopyDemo2DTO> testBeanCopy() {
-    CopyDemoDTO copyDemoDTO = new CopyDemoDTO();
-    copyDemoDTO.setName("Test");
-    UserDTO userDTO = new UserDTO();
-    userDTO.setId(1L);
-    userDTO.setUserName("anhvuong@gmail.com");
-    copyDemoDTO.setUserDTO(userDTO);
-    CopyDemo2DTO copyDemo2DTO = new CopyDemo2DTO();
-    BeanUtils.copyProperties(copyDemoDTO, copyDemo2DTO);
-    return ResponseEntity.ok(copyDemo2DTO);
-  }
-
   @GetMapping("/validatePathVariable/{id}")
   ResponseEntity<String> validatePathVariable(
       @PathVariable("id") @Min(5) int id) {
