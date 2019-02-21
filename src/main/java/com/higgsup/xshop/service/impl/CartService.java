@@ -2,19 +2,20 @@ package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.dto.CartAddDTO;
+import com.higgsup.xshop.dto.CartDTO;
 import com.higgsup.xshop.entity.Cart;
 import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.entity.User;
 import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.CartRepository;
-import com.higgsup.xshop.repository.ProductRepository;
-import com.higgsup.xshop.repository.UserRepository;
 import com.higgsup.xshop.security.model.UserContext;
 import com.higgsup.xshop.service.ICartService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class CartService implements ICartService {
@@ -80,5 +81,19 @@ public class CartService implements ICartService {
       throw new BusinessException(ErrorCode.VALIDATION,
           ErrorCode.VALIDATION.getErrorMessage());
     }
+  }
+
+  @Override
+  public CartDTO updateCart(Integer id, Integer amount) {
+    CartDTO cartDTO = new CartDTO();
+    Optional<Cart> optionalCart = cartRepository.findById(id);
+
+    if (optionalCart.isPresent()){
+      Cart cart = optionalCart.get();
+      cart.setAmount(amount);
+      cartRepository.save(cart);
+      BeanUtils.copyProperties(cart, cartDTO);
+    }
+    return cartDTO;
   }
 }
