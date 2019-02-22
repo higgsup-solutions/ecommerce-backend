@@ -5,18 +5,19 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class ProductDTO {
+public class CartDetailDTO {
   private Integer id;
 
-  private String name;
+  private Integer productId;
+
+  private String productName;
+
+  private Integer amount;
 
   private BigDecimal unitPrice;
 
   private Float discountPercent;
 
-  private String mainImgUrl;
+  private String supplierName;
 
-  private Float avgRating;
-
-  private Long totalRating;
 }

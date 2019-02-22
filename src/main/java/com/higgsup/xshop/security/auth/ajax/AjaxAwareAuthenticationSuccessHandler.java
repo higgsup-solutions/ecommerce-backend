@@ -50,8 +50,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException,
-        ServletException {
+            Authentication authentication) throws IOException {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         
         JwtToken accessToken = tokenFactory.createAccessJwtToken(userContext);
@@ -59,21 +58,30 @@ public class AjaxAwareAuthenticationSuccessHandler implements
 
         List<UserToken> userTokens = new ArrayList<>();
 
-        UserToken accessTokenEntity = new UserToken();
-        accessTokenEntity.setUserId(userContext.getUserId());
+        UserToken accessTokenEntity = userTokenService
+            .findByUserIdAndType(userContext.getUserId(), TokenType.ACCESS);
+        if (accessTokenEntity == null) {
+            accessTokenEntity = new UserToken();
+            accessTokenEntity.setUserId(userContext.getUserId());
+            accessTokenEntity.setType(TokenType.ACCESS);
+        }
         accessTokenEntity.setToken(accessToken.getToken());
-        accessTokenEntity.setType(TokenType.ACCESS);
         userTokens.add(accessTokenEntity);
 
-        UserToken refreshTokenEntity = new UserToken();
-        refreshTokenEntity.setUserId(userContext.getUserId());
+        UserToken refreshTokenEntity = userTokenService
+            .findByUserIdAndType(userContext.getUserId(), TokenType.REFRESH);
+        if (refreshTokenEntity == null) {
+            refreshTokenEntity = new UserToken();
+            refreshTokenEntity.setUserId(userContext.getUserId());
+            refreshTokenEntity.setType(TokenType.REFRESH);
+        }
         refreshTokenEntity.setToken(refreshToken.getToken());
-        refreshTokenEntity.setType(TokenType.REFRESH);
+
         userTokens.add(refreshTokenEntity);
 
         userTokenService.saveAll(userTokens);
 
-        Map<String, String> tokenMap = new HashMap<String, String>();
+        Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", accessToken.getToken());
         tokenMap.put("refreshToken", refreshToken.getToken());
 
@@ -89,7 +97,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements
      * in the session during the authentication process..
      * 
      */
-    protected final void clearAuthenticationAttributes(
+    private void clearAuthenticationAttributes(
         HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 

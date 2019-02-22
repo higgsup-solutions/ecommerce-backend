@@ -1,6 +1,10 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.common.ErrorCode;
+import com.higgsup.xshop.common.UserRole;
+import com.higgsup.xshop.entity.Role;
 import com.higgsup.xshop.entity.User;
+import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.RoleRepository;
 import com.higgsup.xshop.repository.UserRepository;
 import com.higgsup.xshop.service.IRoleService;
@@ -20,7 +24,6 @@ public class UserService implements IUserService {
 
   private final IRoleService userRoleService;
 
-
   public UserService(UserRepository userRepository,
       PasswordEncoder passwordEncoder,
       RoleRepository roleRepository,
@@ -34,6 +37,23 @@ public class UserService implements IUserService {
   @Override
   @Transactional(readOnly = true)
   public User getByEmail(String email) {
-    return userRepository.findByEmail(email).orElse(null);
+    return userRepository.findByEmail(email);
   }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public User register(User user) {
+    User result;
+    Role userRole = new Role();
+    userRole.setId(1);
+    userRole.setRole(UserRole.MEMBER);
+    user.setRole(userRole);
+    try{
+      result = userRepository.save(user);
+    }catch (Exception e){
+      throw new BusinessException(ErrorCode.GLOBAL, "Cannot create new user");
+    }
+    return result;
+  }
+
 }

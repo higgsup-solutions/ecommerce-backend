@@ -16,7 +16,7 @@ import java.util.Collections;
 @Component
 public class RequestLoggerAspect {
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Around("execution(@com.higgsup.xshop.log.RequestLogger * com.higgsup.xshop.controller.*.*(..)) && @annotation(requestLogger)")
   public Object logRequest(ProceedingJoinPoint joinPoint,
