@@ -38,21 +38,16 @@ public class GlobalExceptionHandler {
             .append("\n");
       }
     }
+
     logger.error(apiLog.toString());
 
-    IPagedResponse<Object> iPagedResponse = new IPagedResponse<>() {
-      @Override
-      public void setResponseMessage(ResponseMessage<Object> responseMessage) {
-        responseMessage.setMessageCode(
-            String.valueOf(exception.getErrorCode().getErrorCode()));
-        responseMessage.setMessageString(exception.getMessage());
-        super.setResponseMessage(responseMessage);
-      }
-    };
+    ResponseMessage<Object> responseMessage = new ResponseMessage<>();
 
-    iPagedResponse.setResponseMessage(new ResponseMessage<>());
+    responseMessage.setMessageCode(
+        String.valueOf(exception.getErrorCode().getErrorCode()));
+    responseMessage.setMessageString(exception.getMessage());
 
-    return ResponseEntity.ok(iPagedResponse);
+    return ResponseEntity.ok(new IPagedResponse<>(responseMessage));
   }
 
   @ExceptionHandler(value = { Exception.class })
@@ -64,24 +59,19 @@ public class GlobalExceptionHandler {
 
     logger.error("error: " + exception.getMessage(), exception.getCause());
 
-    IPagedResponse<Object> iPagedResponse = new IPagedResponse<>() {
-      @Override
-      public void setResponseMessage(ResponseMessage<Object> responseMessage) {
-        if(exception instanceof ConstraintViolationException) {
-          responseMessage.setMessageCode(
-              String.valueOf(ErrorCode.VALIDATION.getErrorCode()));
-          responseMessage.setMessageString(exception.getMessage());
-        } else {
-          responseMessage.setMessageCode(
-              String.valueOf(ErrorCode.GLOBAL.getErrorCode()));
-          responseMessage.setMessageString("Error system.");
-        }
-        super.setResponseMessage(responseMessage);
-      }
-    };
+    ResponseMessage<Object> responseMessage = new ResponseMessage<>();
 
-    iPagedResponse.setResponseMessage(new ResponseMessage<>());
-    return ResponseEntity.ok(iPagedResponse);
+    if (exception instanceof ConstraintViolationException) {
+      responseMessage.setMessageCode(
+          String.valueOf(ErrorCode.VALIDATION.getErrorCode()));
+      responseMessage.setMessageString(exception.getMessage());
+    } else {
+      responseMessage.setMessageCode(
+          String.valueOf(ErrorCode.GLOBAL.getErrorCode()));
+      responseMessage.setMessageString("Error system.");
+    }
+
+    return ResponseEntity.ok(new IPagedResponse<>(responseMessage));
   }
 
 }
