@@ -4,8 +4,9 @@ import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.JpaResultConverter;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.SupplierFilterDTO;
-import com.higgsup.xshop.repository.ProductRepositoryCustom;
+import com.higgsup.xshop.repository.SupplierRepositoryCustom;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -13,16 +14,17 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
+public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
 
   private final EntityManager entityManager;
 
-  public ProductRepositoryCustomImpl(
+  public SupplierRepositoryCustomImpl(
       EntityManager entityManager) {
     this.entityManager = entityManager;
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<SupplierFilterDTO> getDistinctSupplierByCriteria(
       ProductCriteriaDTO criteria) {
     StringBuilder sql = new StringBuilder(
