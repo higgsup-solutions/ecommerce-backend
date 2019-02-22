@@ -1,5 +1,6 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.common.ConstantNumber;
 import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.higgsup.xshop.common.ConstantNumber.NUMBER_OF_RELATED_PRODUCT;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX;
 
 @Service
 public class ProductService implements IProductService {
@@ -89,9 +91,11 @@ public class ProductService implements IProductService {
     List<RelatedProductDTO> relatedProductDTOS = new ArrayList<>();
     Product searchedProduct = productRepository.getOne(productId);
     Integer category_id = searchedProduct.getCategory().getId();
-
-    List<Product> relatedProducts = productRepository
-        .findRelatedProductByCategoryId(category_id, NUMBER_OF_RELATED_PRODUCT.getValue());
+    Pageable pageRequest = PageRequest
+        .of(PAGE_INDEX.getValue(), NUMBER_OF_RELATED_PRODUCT.getValue(),
+            Sort.Direction.DESC, "unitPrice");
+    Page<Product> relatedProducts = productRepository
+        .findAllByCategory_Id(category_id, pageRequest);
 
     relatedProducts.forEach(product -> relatedProductDTOS
         .add(convertEntityToRelatedProductDTO(product)));
