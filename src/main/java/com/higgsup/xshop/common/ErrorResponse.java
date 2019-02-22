@@ -23,7 +23,8 @@ public class ErrorResponse {
 
     private final Date timestamp;
 
-    protected ErrorResponse(final String message, final ErrorCode errorCode, HttpStatus status) {
+    private ErrorResponse(final String message, final ErrorCode errorCode,
+        HttpStatus status) {
         this.message = message;
         this.errorCode = errorCode;
         this.status = status;

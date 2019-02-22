@@ -83,9 +83,7 @@ public class ProductService implements IProductService {
   private Specification<Product> buildCriteria(ProductCriteriaDTO criteria) {
     Specification<Product> conditionWhere = Specification.where(
         (
-            (root, query, cb) -> {
-              return cb.conjunction();
-            }
+            (root, query, cb) -> cb.conjunction()
         ));
 
     if (!StringUtils.isEmpty(criteria.getTextSearch())) {
@@ -127,37 +125,27 @@ public class ProductService implements IProductService {
   }
 
   private Specification<Product> buildCriteriaTextSearch(String textSearch) {
-    return (root, query, cb) -> {
-      return cb.or(cb.like(root.get("name"), '%' + textSearch + '%'),
-          cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
-          cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
-    };
+    return (root, query, cb) -> cb.or(cb.like(root.get("name"), '%' + textSearch + '%'),
+        cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
+        cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
   }
 
   private Specification<Product> buildCriteriaSupplier(Integer supplierId) {
-    return (root, query, cb) -> {
-      return cb.equal(root.get("supplierId"), supplierId);
-    };
+    return (root, query, cb) -> cb.equal(root.get("supplierId"), supplierId);
   }
 
   private Specification<Product> buildCriteriaStatus(ProductStatus status) {
-    return (root, query, cb) -> {
-      return cb.lessThanOrEqualTo(root.get("status"), status);
-    };
+    return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("status"), status);
   }
 
   private Specification<Product> buildCriteriaAvgRating(Integer avgRating) {
-    return (root, query, cb) -> {
-      return cb.greaterThanOrEqualTo(root.get("avgRating"), avgRating);
-    };
+    return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("avgRating"), avgRating);
   }
 
   private Specification<Product> buildCriteriaUnitPrice(
       BigDecimal fromUnitPrice, BigDecimal toUnitPrice) {
-    return (root, query, cb) -> {
-      return cb.and(cb.lessThanOrEqualTo(root.get("unitPrice"), toUnitPrice),
-          cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
-    };
+    return (root, query, cb) -> cb.and(cb.lessThanOrEqualTo(root.get("unitPrice"), toUnitPrice),
+        cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
   }
 
   private ProductDTO mapProductDTO(Product product) {

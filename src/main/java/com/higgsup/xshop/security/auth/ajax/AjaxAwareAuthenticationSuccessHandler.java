@@ -50,8 +50,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException,
-        ServletException {
+            Authentication authentication) throws IOException {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         
         JwtToken accessToken = tokenFactory.createAccessJwtToken(userContext);
@@ -82,7 +81,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements
 
         userTokenService.saveAll(userTokens);
 
-        Map<String, String> tokenMap = new HashMap<String, String>();
+        Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", accessToken.getToken());
         tokenMap.put("refreshToken", refreshToken.getToken());
 
@@ -98,7 +97,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements
      * in the session during the authentication process..
      * 
      */
-    protected final void clearAuthenticationAttributes(
+    private void clearAuthenticationAttributes(
         HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 

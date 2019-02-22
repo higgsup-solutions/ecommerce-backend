@@ -76,12 +76,12 @@ public class TokenEndpoint {
 
     @GetMapping("/api/auth/token")
     public JwtToken refreshToken(
-        HttpServletRequest request, HttpServletResponse response) throws IOException,
-        ServletException {
+        HttpServletRequest request, HttpServletResponse response) {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.AUTHENTICATION_HEADER_NAME));
         
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
-        RefreshToken refreshToken = RefreshToken.create(rawToken, applicationSecurityProperty.getJwt().getTokenSigningKey()).orElseThrow(() -> new InvalidJwtToken());
+        RefreshToken refreshToken = RefreshToken.create(rawToken, applicationSecurityProperty.getJwt().getTokenSigningKey()).orElseThrow(
+            InvalidJwtToken::new);
 
         String userId = refreshToken.getUserId();
         if (!refreshTokenVerifier.verify(userId, tokenPayload)) {
@@ -127,8 +127,6 @@ public class TokenEndpoint {
             }
         } catch (BadCredentialsException | JwtExpiredTokenException ex) {
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            throw e;
         }
         return ResponseEntity.ok().build();
     }
