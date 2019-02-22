@@ -2,12 +2,8 @@ package com.higgsup.xshop.common;
 
 import java.lang.reflect.Constructor;
 
-/**
- * @author Tiepnm.
- */
 public abstract class ResultMapper {
 
-    @SuppressWarnings(value = "unchecked")
     protected <T> T createInstance(Constructor<?> ctor, Object[] args) {
         try {
             T t =  (T) ctor.newInstance(args);
