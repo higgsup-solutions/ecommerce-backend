@@ -2,6 +2,7 @@ package com.higgsup.xshop.controller;
 
 import com.higgsup.xshop.dto.CartAddDTO;
 import com.higgsup.xshop.dto.CartDTO;
+import com.higgsup.xshop.dto.CartDetailDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.ICartService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/carts")
@@ -47,5 +50,13 @@ public class CartController {
   public IPagedResponse<Object> addProduct(@RequestBody CartAddDTO cartAddDTO) {
     cartService.addProduct(cartAddDTO);
     return new IPagedResponse<>(new ResponseMessage<>());
+  }
+
+  @GetMapping
+  @ApiOperation(value = "API add product into cart", response = IPagedResponse.class)
+  public IPagedResponse<List<CartDetailDTO>> getCartDetail() {
+    ResponseMessage<List<CartDetailDTO>> responseMessage = new ResponseMessage<>();
+    responseMessage.setData(cartService.getCartDetail());
+    return new IPagedResponse<>(responseMessage);
   }
 }
