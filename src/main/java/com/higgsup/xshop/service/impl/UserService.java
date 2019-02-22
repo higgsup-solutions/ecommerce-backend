@@ -5,11 +5,9 @@ import com.higgsup.xshop.common.UserRole;
 import com.higgsup.xshop.entity.Role;
 import com.higgsup.xshop.entity.User;
 import com.higgsup.xshop.exception.BusinessException;
-import com.higgsup.xshop.repository.RoleRepository;
 import com.higgsup.xshop.repository.UserRepository;
-import com.higgsup.xshop.service.IRoleService;
 import com.higgsup.xshop.service.IUserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,20 +16,12 @@ public class UserService implements IUserService {
 
   private final UserRepository userRepository;
 
-  private final PasswordEncoder passwordEncoder;
-
-  private final RoleRepository roleRepository;
-
-  private final IRoleService userRoleService;
+  private final BCryptPasswordEncoder encoder;
 
   public UserService(UserRepository userRepository,
-      PasswordEncoder passwordEncoder,
-      RoleRepository roleRepository,
-      IRoleService userRoleService) {
+      BCryptPasswordEncoder encoder) {
     this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.roleRepository = roleRepository;
-    this.userRoleService = userRoleService;
+    this.encoder = encoder;
   }
 
   @Override
@@ -48,9 +38,10 @@ public class UserService implements IUserService {
     userRole.setId(1);
     userRole.setRole(UserRole.MEMBER);
     user.setRole(userRole);
-    try{
+    user.setPassword(encoder.encode(user.getPassword()));
+    try {
       result = userRepository.save(user);
-    }catch (Exception e){
+    } catch (Exception e) {
       throw new BusinessException(ErrorCode.GLOBAL, "Cannot create new user");
     }
     return result;
