@@ -3,8 +3,6 @@ package com.higgsup.xshop.controller;
 import com.higgsup.xshop.dto.BreadcrumbDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
-import com.higgsup.xshop.entity.Category;
-import com.higgsup.xshop.service.ICartService;
 import com.higgsup.xshop.service.ICategoryService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
