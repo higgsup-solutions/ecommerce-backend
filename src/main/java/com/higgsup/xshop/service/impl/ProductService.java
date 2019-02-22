@@ -50,12 +50,10 @@ public class ProductService implements IProductService {
   @Transactional(readOnly = true)
   public IPagedResponse<List<ProductDTO>> searchProduct(
       ProductCriteriaDTO criteria, int pageSize, int pageIndex) {
-
-    IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>();
-    iPagedResponse.setPageIndex(pageIndex);
-    iPagedResponse.setPageSize(pageSize);
-
     ResponseMessage<List<ProductDTO>> responseMessage = new ResponseMessage<>();
+    IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>(
+        responseMessage);
+
     List<ProductDTO> productDTOs = new ArrayList<>();
 
     if (!isEmptyCriteria(criteria)) {
@@ -75,7 +73,10 @@ public class ProductService implements IProductService {
     }
 
     responseMessage.setData(productDTOs);
-    iPagedResponse.setResponseMessage(responseMessage);
+
+    iPagedResponse.setPageIndex(pageIndex);
+    iPagedResponse.setPageSize(pageSize);
+
     return iPagedResponse;
   }
 

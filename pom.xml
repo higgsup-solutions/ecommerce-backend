@@ -128,9 +128,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
+        <finalName>xshop</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

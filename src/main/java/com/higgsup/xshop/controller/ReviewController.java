@@ -28,10 +28,8 @@ public class ReviewController {
   @GetMapping("/feedback/{id}")
   @ApiOperation(value = "API get feedback review by product id", response = IPagedResponse.class)
   public IPagedResponse<List<ReviewDTO>> getFeedback(@PathVariable("id") Integer id){
-    IPagedResponse<List<ReviewDTO>> iPagedResponse = new IPagedResponse<>();
     ResponseMessage<List<ReviewDTO>> responseMessage = new ResponseMessage<>();
     responseMessage.setData(reviewService.getFeedBackByProductId(id));
-    iPagedResponse.setResponseMessage(responseMessage);
-    return iPagedResponse;
+    return new IPagedResponse<>(responseMessage);
   }
 }
