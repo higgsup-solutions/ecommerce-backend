@@ -1,7 +1,9 @@
 package com.higgsup.xshop.common;
 
+import com.higgsup.xshop.security.model.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -51,5 +53,10 @@ public class WebUtil {
             }
         }
         return payload;
+    }
+
+    public static UserContext getCurrentUser() {
+        return (UserContext) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
     }
 }
