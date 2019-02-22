@@ -1,9 +1,11 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.common.ConstantNumber;
 import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.RelatedProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.entity.Product;
@@ -23,6 +25,9 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.higgsup.xshop.common.ConstantNumber.NUMBER_OF_RELATED_PRODUCT;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX;
 
 @Service
 public class ProductService implements IProductService {
@@ -78,6 +83,24 @@ public class ProductService implements IProductService {
     iPagedResponse.setPageSize(pageSize);
 
     return iPagedResponse;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<RelatedProductDTO> getRelatedProduct(Integer productId) {
+    List<RelatedProductDTO> relatedProductDTOS = new ArrayList<>();
+    Product searchedProduct = productRepository.getOne(productId);
+    Integer category_id = searchedProduct.getCategory().getId();
+    Pageable pageRequest = PageRequest
+        .of(PAGE_INDEX.getValue(), NUMBER_OF_RELATED_PRODUCT.getValue(),
+            Sort.Direction.DESC, "unitPrice");
+    Page<Product> relatedProducts = productRepository
+        .findAllByCategory_Id(category_id, pageRequest);
+
+    relatedProducts.forEach(product -> relatedProductDTOS
+        .add(convertEntityToRelatedProductDTO(product)));
+
+    return relatedProductDTOS;
   }
 
   private Specification<Product> buildCriteria(ProductCriteriaDTO criteria) {
@@ -154,6 +177,14 @@ public class ProductService implements IProductService {
     String[] imgUrls = product.getImgUrl().split(";");
     productDTO.setMailImgUrl(imgUrls[0]);
     return productDTO;
+  }
+
+  private RelatedProductDTO convertEntityToRelatedProductDTO(Product product) {
+    RelatedProductDTO relatedProductDTO = new RelatedProductDTO();
+    BeanUtils.copyProperties(product, relatedProductDTO);
+    String[] imgUrls = product.getImgUrl().split(";");
+    relatedProductDTO.setMainImgUrl(imgUrls[0]);
+    return relatedProductDTO;
   }
 
   private boolean isEmptyCriteria(ProductCriteriaDTO criteria) {
