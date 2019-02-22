@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-;
-
 /**
  * AjaxLoginProcessingFilter
  * 
@@ -47,7 +45,7 @@ public class AjaxLoginProcessingFilter extends
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException {
+            throws AuthenticationException, IOException {
         LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
 
         if (StringUtils.isEmpty(loginRequest.getEmail()) || StringUtils

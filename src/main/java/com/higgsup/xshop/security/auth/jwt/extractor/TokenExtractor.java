@@ -9,5 +9,5 @@ package com.higgsup.xshop.security.auth.jwt.extractor;
  * Aug 5, 2016
  */
 public interface TokenExtractor {
-    public String extract(String payload);
+    String extract(String payload);
 }

@@ -10,10 +10,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
  *         Aug 3, 2016
  */
 public enum ErrorCode {
-    GLOBAL(2, "System error"),
-    VALIDATION(1, "Validation error"),
-    AUTHENTICATION(10, "Authentication error"),
-    JWT_TOKEN_EXPIRED(11, "JWT token expired"),
+  GLOBAL(2, "System error"),
+  VALIDATION(1, "Validation error"),
+  AUTHENTICATION(10, "Authentication error"),
+  JWT_TOKEN_EXPIRED(11, "JWT token expired"),
+  UNAUTHORIZED(12, "Unauthorized"),
 
   //Cart error
   AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT(12,
@@ -21,21 +22,23 @@ public enum ErrorCode {
 
   //Product error
   PRODUCT_NOT_FOUND(13, "Product not found");
-    private int errorCode;
-    private String errorMessage;
 
-    ErrorCode(int errorCode, String errorMessage ) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-    }
+  private int errorCode;
 
-    @JsonValue
-    public int getErrorCode() {
-        return this.errorCode;
-    }
+  private String errorMessage;
 
-    @JsonValue
-    public String getErrorMessage() {
-        return this.errorMessage;
-    }
+  ErrorCode(int errorCode, String errorMessage) {
+    this.errorCode = errorCode;
+    this.errorMessage = errorMessage;
+  }
+
+  @JsonValue
+  public int getErrorCode() {
+    return this.errorCode;
+  }
+
+  @JsonValue
+  public String getErrorMessage() {
+    return this.errorMessage;
+  }
 }
