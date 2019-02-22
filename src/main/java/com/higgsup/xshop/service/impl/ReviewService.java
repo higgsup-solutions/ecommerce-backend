@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.higgsup.xshop.common.Page.PAGE_INDEX_FOR_FEEDBACK;
-import static com.higgsup.xshop.common.Page.PAGE_SIZE_FOR_FEEDBACK;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_SIZE_FOR_FEEDBACK;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,7 +33,7 @@ public class ReviewService implements IReviewService {
   public List<ReviewDTO> getFeedBackByProductId(Integer id) {
     List<ReviewDTO> reviewDTOS = new ArrayList<>();
     Pageable pageRequest = PageRequest
-        .of(PAGE_INDEX_FOR_FEEDBACK.getValue(),
+        .of(PAGE_INDEX.getValue(),
             PAGE_SIZE_FOR_FEEDBACK.getValue(),
             Sort.Direction.DESC, "createdDate");
     Page<Review> reviews = reviewRepository

@@ -3,6 +3,7 @@ package com.higgsup.xshop.controller;
 import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.RelatedProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.IProductService;
@@ -60,4 +61,14 @@ public class ProductController {
     return productService.searchProduct(criteria, pageSize, pageIndex);
   }
 
+  @GetMapping("/{id}")
+  @ApiOperation(value = "API get related products")
+  public ResponseMessage<List<RelatedProductDTO>> getRelatedProduct(
+      @PathVariable("id") Integer id) {
+    ResponseMessage<List<RelatedProductDTO>> responseMessage = new ResponseMessage<>();
+
+    List<RelatedProductDTO> relatedProducts = productService.getRelatedProduct(id);
+    responseMessage.setData(relatedProducts);
+    return responseMessage;
+  }
 }

@@ -1,12 +1,13 @@
 package com.higgsup.xshop.common;
 
-public enum Page {
-  PAGE_INDEX_FOR_FEEDBACK(0),
-  PAGE_SIZE_FOR_FEEDBACK(5);
+public enum ConstantNumber {
+  PAGE_INDEX(0),
+  PAGE_SIZE_FOR_FEEDBACK(5),
+  NUMBER_OF_RELATED_PRODUCT (5);
 
   private Integer value;
 
-  Page(Integer value) {
+  ConstantNumber(Integer value) {
     this.value = value;
   }
 
