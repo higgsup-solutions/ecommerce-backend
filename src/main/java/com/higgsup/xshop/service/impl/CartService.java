@@ -153,8 +153,8 @@ public class CartService implements ICartService {
   private void validateDelete(Cart cart) {
     UserContext userContext = WebUtil.getCurrentUser();
     if (!cart.getUser().getId().equals(userContext.getUserId())) {
-      throw new BusinessException(ErrorCode.NOT_PERMISSION,
-          ErrorCode.NOT_PERMISSION.getErrorMessage());
+      throw new BusinessException(ErrorCode.UNAUTHORIZED,
+          ErrorCode.UNAUTHORIZED.getErrorMessage());
     }
   }
 }

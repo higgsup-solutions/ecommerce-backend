@@ -15,6 +15,5 @@ public interface ICartService {
 
   List<CartDetailDTO> getCartDetail();
 
-
   void deleteProduct(Integer id);
 }
