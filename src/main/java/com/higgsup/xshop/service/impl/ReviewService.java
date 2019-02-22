@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.higgsup.xshop.common.ConstantPage.PAGE_INDEX_FOR_FEEDBACK;
-import static com.higgsup.xshop.common.ConstantPage.PAGE_SIZE_FOR_FEEDBACK;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX_FOR_FEEDBACK;
+import static com.higgsup.xshop.common.ConstantNumber.PAGE_SIZE_FOR_FEEDBACK;
 
 @Service
 @Transactional(readOnly = true)
