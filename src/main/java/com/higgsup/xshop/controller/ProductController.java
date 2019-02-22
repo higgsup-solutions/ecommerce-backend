@@ -3,6 +3,7 @@ package com.higgsup.xshop.controller;
 import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.SupplierFilterDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.IProductService;
@@ -57,5 +58,30 @@ public class ProductController {
     criteria.setStatus(status);
 
     return productService.searchProduct(criteria, pageSize, pageIndex);
+  }
+
+  @GetMapping("/supplier")
+  @ApiOperation(value = "API get search product", response = IPagedResponse.class)
+  public IPagedResponse<List<SupplierFilterDTO>> getSupplierWhenSearchProduct(
+      @RequestParam(value = "textSearch", required = false) String textSearch,
+      @RequestParam(value = "supplierId", required = false) Integer supplierId,
+      @RequestParam(value = "fromUnitPrice", required = false) BigDecimal fromUnitPrice,
+      @RequestParam(value = "toUnitPrice", required = false) BigDecimal toUnitPrice,
+      @RequestParam(value = "avgRating", required = false) Integer avgRating,
+      @RequestParam(value = "status", required = false) ProductStatus status
+  ) {
+    ProductCriteriaDTO criteria = new ProductCriteriaDTO();
+    criteria.setTextSearch(textSearch);
+    criteria.setSupplierId(supplierId);
+    criteria.setFromUnitPrice(fromUnitPrice);
+    criteria.setToUnitPrice(toUnitPrice);
+    criteria.setAvgRating(avgRating);
+    criteria.setStatus(status);
+
+    ResponseMessage<List<SupplierFilterDTO>> responseMessage = new ResponseMessage<>();
+    responseMessage
+        .setData(productService.getSupplierBySearchProduct(criteria));
+
+    return new IPagedResponse<>(responseMessage);
   }
 }

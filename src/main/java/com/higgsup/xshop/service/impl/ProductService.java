@@ -4,10 +4,13 @@ import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.SupplierFilterDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.entity.Product;
+import com.higgsup.xshop.entity.Supplier;
 import com.higgsup.xshop.repository.ProductRepository;
+import com.higgsup.xshop.repository.SupplierRepository;
 import com.higgsup.xshop.service.IProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -23,15 +26,20 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
 
   private final ProductRepository productRepository;
 
+  private final SupplierRepository supplierRepository;
+
   public ProductService(
-      ProductRepository productRepository) {
+      ProductRepository productRepository,
+      SupplierRepository supplierRepository) {
     this.productRepository = productRepository;
+    this.supplierRepository = supplierRepository;
   }
 
   @Override
@@ -78,6 +86,26 @@ public class ProductService implements IProductService {
     iPagedResponse.setPageSize(pageSize);
 
     return iPagedResponse;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public List<SupplierFilterDTO> getSupplierBySearchProduct(
+      ProductCriteriaDTO criteria) {
+
+    List<SupplierFilterDTO> suppliers = new ArrayList<>();
+    if (criteria.getSupplierId() != null) {
+      Optional<Supplier> supplier = supplierRepository
+          .findById(criteria.getSupplierId());
+      if (supplier.isPresent()) {
+        suppliers.add(new SupplierFilterDTO(supplier.get().getId(),
+            supplier.get().getName()));
+      }
+    } else {
+      suppliers = productRepository.getDistinctSupplierByCriteria(criteria);
+    }
+
+    return suppliers;
   }
 
   private Specification<Product> buildCriteria(ProductCriteriaDTO criteria) {
