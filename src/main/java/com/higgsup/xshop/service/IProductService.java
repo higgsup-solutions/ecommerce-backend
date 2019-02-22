@@ -11,5 +11,4 @@ public interface IProductService {
 
   IPagedResponse<List<ProductDTO>> searchProduct(ProductCriteriaDTO criteria,
       int pageSize, int pageIndex);
-  List<ProductDTO> getProductByCategoryId(Integer id);
 }

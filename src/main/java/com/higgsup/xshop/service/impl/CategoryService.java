@@ -1,17 +1,26 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.dto.BreadcrumbDTO;
+import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.base.IPagedResponse;
+import com.higgsup.xshop.dto.base.ResponseMessage;
+import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.CategoryRepository;
+import com.higgsup.xshop.repository.ProductRepository;
 import com.higgsup.xshop.service.ICategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.higgsup.xshop.entity.Category;
-import com.higgsup.xshop.repository.CategoryRepository;
-import com.higgsup.xshop.service.ICategoryService;
-import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,8 +28,12 @@ public class CategoryService implements ICategoryService {
 
   private final CategoryRepository categoryRepository;
 
-  public CategoryService(CategoryRepository categoryRepository){
+  private final ProductRepository productRepository;
+
+  public CategoryService(CategoryRepository categoryRepository,
+      ProductRepository productRepository) {
     this.categoryRepository = categoryRepository;
+    this.productRepository = productRepository;
   }
 
   @Override
@@ -49,5 +62,41 @@ public class CategoryService implements ICategoryService {
   public List<Category> getAll() {
     return categoryRepository.findAll();
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public IPagedResponse<List<ProductDTO>> getListProductsByCategoryId(
+      Integer categoryId, int pageSize, int pageIndex) {
+
+    List<ProductDTO> productDTOs = new ArrayList<>();
+
+    Page<Product> productPage;
+
+    ResponseMessage<List<ProductDTO>> responseMessage = new ResponseMessage<>();
+    IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>(
+        responseMessage);
+
+    List<Integer> listChildCategoryId = this.categoryRepository
+        .getListChildCategory(categoryId);
+    Pageable pageRequest = PageRequest
+        .of(pageIndex, pageSize, Sort.Direction.ASC, "unitPrice");
+
+    productPage = this.productRepository
+        .findProductsByIdIn(listChildCategoryId, pageRequest);
+
+    if (!CollectionUtils.isEmpty(productPage.getContent())) {
+      productPage.getContent()
+          .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
+    }
+
+    responseMessage.setData(productDTOs);
+    iPagedResponse.setPageIndex(pageIndex);
+    iPagedResponse.setPageSize(pageSize);
+    iPagedResponse.setTotalItem(productPage.getTotalElements());
+    iPagedResponse.setTotalPage(productPage.getTotalPages());
+
+    return iPagedResponse;
+  }
+
 }
 

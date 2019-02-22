@@ -6,11 +6,9 @@ import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
-import com.higgsup.xshop.entity.Category;
 import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.repository.ProductRepository;
 import com.higgsup.xshop.service.IProductService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +45,7 @@ public class ProductService implements IProductService {
         .of(0, 18, Sort.Direction.DESC, "discountPercent");
     Page<Product> products = productRepository.findAll(pageRequest);
     products.getContent()
-        .forEach(product -> productDTOs.add(mapProductDTO(product)));
+        .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
     return productDTOs;
   }
 
@@ -73,7 +71,7 @@ public class ProductService implements IProductService {
 
       if (!CollectionUtils.isEmpty(productPage.getContent())) {
         productPage.getContent()
-            .forEach(product -> productDTOs.add(mapProductDTO(product)));
+            .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
       }
     }
 
@@ -153,13 +151,6 @@ public class ProductService implements IProductService {
         cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
   }
 
-  private ProductDTO mapProductDTO(Product product) {
-    ProductDTO productDTO = new ProductDTO();
-    BeanUtils.copyProperties(product, productDTO);
-    String[] imgUrls = product.getImgUrl().split(";");
-    productDTO.setMainImgUrl(imgUrls[0]);
-    return productDTO;
-  }
 
   private boolean isEmptyCriteria(ProductCriteriaDTO criteria) {
     if (!StringUtils.isEmpty(criteria.getTextSearch())) {
@@ -178,42 +169,6 @@ public class ProductService implements IProductService {
     return criteria.getAvgRating() == null;
   }
 
-  @Override
-  public List<ProductDTO> getProductByCategoryId(Integer id) {
-    List<ProductDTO> productDTOList = new ArrayList<>();
-    Pageable pageRequest = PageRequest
-        .of(0, 18, Sort.Direction.DESC, "discountPercent");
-    List<Category> allCategoryList = categoryService.getAll();
-    Category categoryL1 = categoryService.getCategoryById(id);
-    List<Category> categoryListL2 = categoryService.getCategoryByParentId(categoryL1.getId());
-    List<Category> categoryListL3 = new ArrayList<>();
 
-    for (Category categoryL2 : categoryListL2) {
-      for (Category categoryL3 : allCategoryList) {
-        if (categoryL3.getParentId().equals(categoryL2.getId())){
-          categoryListL3.add(categoryL3);
-        }
-      }
-    }
-
-    List<Category> CategoryList = new ArrayList<>();
-
-    CategoryList.add(categoryL1);
-    CategoryList.addAll(categoryListL3);
-    CategoryList.addAll(categoryListL2);
-
-    Page<Product> productList = productRepository
-        .findProductsByCategory(categoryL1, pageRequest);
-
-    for (Product product : productList.getContent()) {
-      ProductDTO productDTO = new ProductDTO();
-      BeanUtils.copyProperties(product, productDTO);
-      String[] imgUrls = product.getImgUrl().split(";");
-      productDTO.setMainImgUrl(imgUrls[0]);
-      productDTOList.add(productDTO);
-    }
-
-    return productDTOList;
-  }
 
 }
