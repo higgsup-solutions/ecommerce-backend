@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class CartDetailDTO {
   private Integer id;
 
-  private String productId;
+  private Integer productId;
 
   private String productName;
 
