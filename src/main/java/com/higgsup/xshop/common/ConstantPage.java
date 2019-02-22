@@ -1,12 +1,12 @@
 package com.higgsup.xshop.common;
 
-public enum Page {
+public enum ConstantPage {
   PAGE_INDEX_FOR_FEEDBACK(0),
   PAGE_SIZE_FOR_FEEDBACK(5);
 
   private Integer value;
 
-  Page(Integer value) {
+  ConstantPage(Integer value) {
     this.value = value;
   }
 
