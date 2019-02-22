@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -43,7 +43,8 @@ public class JwtTokenFactory {
             throw new IllegalArgumentException("User doesn't have any privileges");
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername()).setId(userContext.getUserId().toString());
-        claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
+        claims.put("scopes", userContext.getAuthorities().stream().map(
+            Object::toString).collect(Collectors.toList()));
 
         LocalDateTime currentTime = LocalDateTime.now();
         
@@ -72,7 +73,8 @@ public class JwtTokenFactory {
         LocalDateTime currentTime = LocalDateTime.now();
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
-        claims.put("scopes", Arrays.asList(Scopes.REFRESH_TOKEN.authority()));
+        claims.put("scopes",
+            Collections.singletonList(Scopes.REFRESH_TOKEN.authority()));
         
         String token = Jwts.builder()
           .setClaims(claims)
