@@ -53,7 +53,7 @@ public class CartController {
   }
 
   @GetMapping
-  @ApiOperation(value = "API add product into cart", response = IPagedResponse.class)
+  @ApiOperation(value = "API get info cart", response = IPagedResponse.class)
   public IPagedResponse<List<CartDetailDTO>> getCartDetail() {
     ResponseMessage<List<CartDetailDTO>> responseMessage = new ResponseMessage<>();
     responseMessage.setData(cartService.getCartDetail());
