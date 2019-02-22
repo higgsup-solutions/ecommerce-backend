@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.higgsup.xshop.common.Number.NUMBER_OF_RELATED_PRODUCT;
+import static com.higgsup.xshop.common.ConstantNumber.NUMBER_OF_RELATED_PRODUCT;
 
 @Service
 public class ProductService implements IProductService {
