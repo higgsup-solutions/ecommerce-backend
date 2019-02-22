@@ -24,7 +24,7 @@ public class BreadcrumbController {
   }
 
   @GetMapping()
-  @ApiOperation(value = "API update cart", response = IPagedResponse.class)
+  @ApiOperation(value = "API get breadcrumbs", response = IPagedResponse.class)
   public ResponseEntity<IPagedResponse<List<BreadcrumbDTO>>> getBreadcrumb(
       @RequestParam Integer categoryId) {
     ResponseMessage<List<BreadcrumbDTO>> responseMessage = new ResponseMessage<>();

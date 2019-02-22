@@ -24,10 +24,23 @@ public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
   @Override
   public List<BreadcrumbDTO> searchBreadcrumbByCategoryId(Integer categoryId) {
     String sql =
-        "with recursive cte (id, name, parent_id, `level`) as (select id, name,parent_id, `level` from category where id = :categoryId union all"
-            + "select c.id, c.name,c.parent_id, c.`level` from category c.inner join cte on c.id = cte.parent_id)"
+        "with recursive cte (id, name, parent_id, `level`) as ("
+            + "  select     id,"
+            + "             name,"
+            + "             ifnull(parent_id, 0),"
+            + "             `level`"
+            + "  from       category"
+            + "  where      id = :categoryId"
+            + "  union all"
+            + "  select     c.id,"
+            + "             c.name,"
+            + "             ifnull(c.parent_id, 0),"
+            + "             c.`level`"
+            + "  from       category c"
+            + "  inner join cte"
+            + "          on c.id = cte.parent_id"
+            + ")"
             + "select * from cte order by `level`;";
-
     Query query = entityManager.createNativeQuery(sql)
         .setParameter("categoryId", categoryId);
     return new JpaResultConverter().list(query, BreadcrumbDTO.class);
