@@ -9,4 +9,6 @@ public interface ICartService {
   Integer totalItemCart();
 
   void addProduct(CartAddDTO cartAddDTO);
+
+  void deleteProduct(Integer id);
 }

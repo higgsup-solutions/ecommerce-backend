@@ -1,6 +1,7 @@
 package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.ErrorCode;
+import com.higgsup.xshop.common.WebUtil;
 import com.higgsup.xshop.dto.CartAddDTO;
 import com.higgsup.xshop.dto.CartDTO;
 import com.higgsup.xshop.entity.Cart;
@@ -106,4 +107,23 @@ public class CartService implements ICartService {
     return cartRepository.countItemCartByUserId(user);
   }
 
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void deleteProduct(Integer id) {
+    Cart cart = cartRepository.getOne(id);
+    if (cart != null) {
+
+      validateDelete(cart);
+
+      cartRepository.delete(cart);
+    }
+  }
+
+  private void validateDelete(Cart cart) {
+    UserContext userContext = WebUtil.getCurrentUser();
+    if (!cart.getUser().getId().equals(userContext.getUserId())) {
+      throw new BusinessException(ErrorCode.NOT_PERMISSION,
+          ErrorCode.NOT_PERMISSION.getErrorMessage());
+    }
+  }
 }

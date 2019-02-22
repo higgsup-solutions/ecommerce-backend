@@ -7,6 +7,7 @@ import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.ICartService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,13 @@ public class CartController {
   @ApiOperation(value = "API add product into cart", response = IPagedResponse.class)
   public IPagedResponse<Object> addProduct(@RequestBody CartAddDTO cartAddDTO) {
     cartService.addProduct(cartAddDTO);
+    return new IPagedResponse<>(new ResponseMessage<>());
+  }
+
+  @DeleteMapping("/{id}")
+  @ApiOperation(value = "API delete product into cart", response = IPagedResponse.class)
+  public IPagedResponse<Object> deleteProduct(@PathVariable("id") Integer id) {
+    cartService.deleteProduct(id);
     return new IPagedResponse<>(new ResponseMessage<>());
   }
 }

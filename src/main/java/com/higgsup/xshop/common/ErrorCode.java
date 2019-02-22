@@ -14,6 +14,7 @@ public enum ErrorCode {
     VALIDATION(1, "Validation error"),
     AUTHENTICATION(10, "Authentication error"),
     JWT_TOKEN_EXPIRED(11, "JWT token expired"),
+  NOT_PERMISSION(12, "User not permission"),
 
   //Cart error
   AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT(12,
