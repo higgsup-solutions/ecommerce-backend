@@ -39,15 +39,13 @@ public class CartController {
   public IPagedResponse<Integer> getTotalItemCart() {
     ResponseMessage<Integer> responseMessage = new ResponseMessage<>();
     responseMessage.setData(cartService.totalItemCart());
-    IPagedResponse<Integer> response = new IPagedResponse<>();
-    response.setResponseMessage(responseMessage);
-    return response;
+    return new IPagedResponse<>(responseMessage);
   }
 
   @PostMapping
   @ApiOperation(value = "API add product into cart", response = IPagedResponse.class)
-  public IPagedResponse addProduct(@RequestBody CartAddDTO cartAddDTO) {
+  public IPagedResponse<Object> addProduct(@RequestBody CartAddDTO cartAddDTO) {
     cartService.addProduct(cartAddDTO);
-    return new IPagedResponse();
+    return new IPagedResponse<>(new ResponseMessage<>());
   }
 }

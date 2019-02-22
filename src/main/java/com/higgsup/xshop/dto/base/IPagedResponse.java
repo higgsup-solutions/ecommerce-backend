@@ -1,10 +1,15 @@
 package com.higgsup.xshop.dto.base;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class IPagedResponse<T> {
-  private ResponseMessage<T> responseMessage = new ResponseMessage<>();
+
+  private final ResponseMessage<T> responseMessage;
 
   private long totalItem;
   private int pageIndex;

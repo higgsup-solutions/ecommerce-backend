@@ -31,11 +31,9 @@ public class ProductController {
   @GetMapping("/top-sale")
   @ApiOperation(value = "API get top sale product", response = IPagedResponse.class)
   public IPagedResponse<List<ProductDTO>> getProductTopSale() {
-    IPagedResponse<List<ProductDTO>> iPagedResponse = new IPagedResponse<>();
     ResponseMessage<List<ProductDTO>> responseMessage = new ResponseMessage<>();
     responseMessage.setData(productService.getProductTopSale());
-    iPagedResponse.setResponseMessage(responseMessage);
-    return iPagedResponse;
+    return new IPagedResponse<>(responseMessage);
   }
 
   @GetMapping

@@ -11,7 +11,10 @@ import com.higgsup.xshop.service.impl.ValidationService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("register")
@@ -36,10 +39,8 @@ public class RegisterController {
     }
     User newUser = new User();
     BeanUtils.copyProperties(userRegisterDTO, newUser);
-    IPagedResponse<User> iPagedResponse = new IPagedResponse<>();
     ResponseMessage<User> responseMessage = new ResponseMessage<>();
     responseMessage.setData(this.userService.register(newUser));
-    iPagedResponse.setResponseMessage(responseMessage);
-    return ResponseEntity.ok(iPagedResponse);
+    return ResponseEntity.ok(new IPagedResponse<>(responseMessage));
   }
 }
