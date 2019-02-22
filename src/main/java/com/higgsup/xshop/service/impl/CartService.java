@@ -78,7 +78,7 @@ public class CartService implements ICartService {
   }
 
   private void validateProduct(CartAddDTO cartAddDTO) {
-    if (!validationService.validate(cartAddDTO)) {
+    if (validationService.validate(cartAddDTO)) {
       throw new BusinessException(ErrorCode.VALIDATION,
           ErrorCode.VALIDATION.getErrorMessage());
     }

@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("register")
 public class RegisterController {
 
-  private IUserService userService;
+  private final IUserService userService;
 
-  private ValidationService validationService;
+  private final ValidationService validationService;
 
   public RegisterController(IUserService userService, ValidationService validationService) {
     this.userService = userService;
@@ -33,7 +33,7 @@ public class RegisterController {
   @ApiOperation(value = "API register", response = IPagedResponse.class)
   public ResponseEntity<IPagedResponse<User>> doRegister(
       @RequestBody UserRegisterDTO userRegisterDTO) {
-    if (!this.validationService.validate(userRegisterDTO)) {
+    if (this.validationService.validate(userRegisterDTO)) {
       throw new BusinessException(ErrorCode.VALIDATION,
           ErrorCode.VALIDATION.getErrorMessage());
     }

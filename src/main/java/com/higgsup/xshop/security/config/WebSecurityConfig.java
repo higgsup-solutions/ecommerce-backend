@@ -29,6 +29,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,16 +80,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private ObjectMapper objectMapper;
 
-  protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(
-      String loginEntryPoint) throws Exception {
+  private AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(
+      String loginEntryPoint) {
     AjaxLoginProcessingFilter filter = new AjaxLoginProcessingFilter(
         loginEntryPoint, successHandler, failureHandler, objectMapper);
     filter.setAuthenticationManager(this.authenticationManager);
     return filter;
   }
 
-  protected JwtTokenAuthenticationProcessingFilter buildJwtTokenAuthenticationProcessingFilter(
-      List<String> pathsToSkip, String pattern) throws Exception {
+  private JwtTokenAuthenticationProcessingFilter buildJwtTokenAuthenticationProcessingFilter(
+      List<String> pathsToSkip, String pattern) {
     SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip,
         pattern);
     JwtTokenAuthenticationProcessingFilter filter
@@ -98,12 +99,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return filter;
   }
 
-  protected CustomCorsFilter buildCustomCorsFilter() {
+  private CustomCorsFilter buildCustomCorsFilter() {
 
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(true);
-    config.setAllowedOrigins(Arrays
-        .asList(applicationSecurityProperty.getCors().getAllowedOrigin()));
+    config.setAllowedOrigins(Collections
+        .singletonList(
+            applicationSecurityProperty.getCors().getAllowedOrigin()));
     config.addAllowedHeader(
         applicationSecurityProperty.getCors().getAllowedHeader());
     config.setMaxAge(applicationSecurityProperty.getCors().getMaxAge());
@@ -148,7 +150,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers(permitAllEndpointList
-            .toArray(new String[permitAllEndpointList.size()]))
+            .toArray(new String[0]))
         .permitAll()
         .and()
         .authorizeRequests()

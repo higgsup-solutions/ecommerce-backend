@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
  * Aug 19, 2016
  */
 public class SkipPathRequestMatcher implements RequestMatcher {
-    private OrRequestMatcher matchers;
-    private RequestMatcher processingMatcher;
+    private final OrRequestMatcher matchers;
+    private final RequestMatcher processingMatcher;
     
     public SkipPathRequestMatcher(List<String> pathsToSkip, String processingPath) {
         List<RequestMatcher> m = new ArrayList<>();
@@ -35,6 +35,6 @@ public class SkipPathRequestMatcher implements RequestMatcher {
         if (matchers.matches(request)) {
             return false;
         }
-        return processingMatcher.matches(request) ? true : false;
+        return processingMatcher.matches(request);
     }
 }
