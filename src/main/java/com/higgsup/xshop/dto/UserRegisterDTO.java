@@ -10,8 +10,6 @@ import javax.validation.constraints.Pattern;
 @Data
 public class UserRegisterDTO {
 
-  private String emailRegex;
-
   @NotNull(message = "First name is a required field")
   private String firstName;
 
