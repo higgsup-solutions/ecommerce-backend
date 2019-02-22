@@ -12,6 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,
     JpaSpecificationExecutor<Product> {
 
   Page<Product> findAllByCategory_Id(Integer category_id, Pageable pageRequest);
+
   Page<Product> findProductsByIdIn(List<Integer> listIds, Pageable pageRequest);
 
 }

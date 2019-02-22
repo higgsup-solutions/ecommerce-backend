@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.higgsup.xshop.entity.Category;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -49,21 +48,6 @@ public class CategoryService implements ICategoryService {
   }
 
   @Override
-  public Category getCategoryById(Integer id) {
-    return categoryRepository.findById(id).orElse(null);
-  }
-
-  @Override
-  public List<Category> getCategoryByParentId(Integer id) {
-    return categoryRepository.findByParentId(id);
-  }
-
-  @Override
-  public List<Category> getAll() {
-    return categoryRepository.findAll();
-  }
-
-  @Override
   @Transactional(readOnly = true)
   public IPagedResponse<List<ProductDTO>> getListProductsByCategoryId(
       Integer categoryId, int pageSize, int pageIndex) {
@@ -81,8 +65,13 @@ public class CategoryService implements ICategoryService {
     Pageable pageRequest = PageRequest
         .of(pageIndex, pageSize, Sort.Direction.ASC, "unitPrice");
 
-    productPage = this.productRepository
-        .findProductsByIdIn(listChildCategoryId, pageRequest);
+    if (listChildCategoryId.isEmpty()) {
+      productPage = this.productRepository
+          .findAllByCategory_Id(categoryId, pageRequest);
+    }else{
+      productPage = this.productRepository
+          .findProductsByIdIn(listChildCategoryId, pageRequest);
+    }
 
     if (!CollectionUtils.isEmpty(productPage.getContent())) {
       productPage.getContent()
