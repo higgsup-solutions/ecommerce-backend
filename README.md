@@ -228,7 +228,7 @@ With the aim of reducing time for generating getter/setter & constructors for mo
 If this is the first time you work with that, please spend some minutes to read [here.](https://www.baeldung.com/intro-to-project-lombok)
 Also you may want to install **_lombok_** Intellij's plugin to avoid red warnings in your editor screens (you probably don't want to disable all warnings except the ones for missing getter/setter & constructors function declaration in those classes)
 
-###Transaction Management
+### Transaction Management
 
 Spring framework provided annotation `@Transactional` for managing transaction when manipulated with JDBC
 
@@ -585,7 +585,7 @@ After that, we will paste token into api-key field with format: `Bearer [token]`
 
 https://dzone.com/articles/spring-boot-restful-api-documentation-with-swagger
 
-##Coding guide
+## Coding guide
 
 See the [Coding guide](CODING.md) file for details
 
