@@ -490,9 +490,9 @@ public class GlobalExceptionHandler {
 https://www.baeldung.com/exception-handling-for-rest-with-spring
 https://www.journaldev.com/2651/spring-mvc-exception-handling-controlleradvice-exceptionhandler-handlerexceptionresolver
 
-##Swagger 
+## Swagger 
 
-###Using
+### Using
 
 Swagger is an open-source framework help developer can design, build, document and testing API follow RESTful Web Services.
 
@@ -500,9 +500,9 @@ In this project, we has been integrated Swagger for documentation and testing pu
 
 For using Swagger-UI, you can access address on your local: `http://localhost:8080/swagger-ui.html`
 
-###Definition
+### Definition
 
-####Controller
+#### Controller
 
 For describe controller in Swagger, you can use list of annotations
 
@@ -544,7 +544,7 @@ public class ProductController {
 }
 ```
 
-####Model
+#### Model
 
 You can use the `@ApiModelProperty` annotation to describe the properties of model
 
@@ -573,7 +573,7 @@ public class Product {
 }
 ```
 
-####Authentication
+#### Authentication
 
 For API authentication with JWT, first thing you must get token by using API `/api/auth/login` in **token-endpoint** API group
 
