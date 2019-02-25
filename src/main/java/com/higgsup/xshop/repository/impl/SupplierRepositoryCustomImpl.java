@@ -81,4 +81,20 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
 
     return new JpaResultConverter().list(query, SupplierFilterDTO.class);
   }
+
+  @Override
+  public List<SupplierFilterDTO> getDistinctSupplierByCategory(
+      List<Integer> categories) {
+
+    StringBuilder sql = new StringBuilder(
+        "select s.id, s.name from supplier s ");
+    sql.append("where id in ( ");
+    sql.append(
+        " select distinct supplier_id from product where category_id in :categories ) ");
+
+    Query query = entityManager.createNativeQuery(sql.toString());
+    query.setParameter("categories", categories);
+
+    return new JpaResultConverter().list(query, SupplierFilterDTO.class);
+  }
 }
