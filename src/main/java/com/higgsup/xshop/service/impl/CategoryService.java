@@ -65,13 +65,10 @@ public class CategoryService implements ICategoryService {
     Pageable pageRequest = PageRequest
         .of(pageIndex, pageSize, Sort.Direction.ASC, "unitPrice");
 
-    if (listChildCategoryId.isEmpty()) {
-      productPage = this.productRepository
-          .findAllByCategory_Id(categoryId, pageRequest);
-    }else{
-      productPage = this.productRepository
-          .findProductsByIdIn(listChildCategoryId, pageRequest);
-    }
+    listChildCategoryId.add(categoryId);
+
+    productPage = this.productRepository
+        .findProductsByIdIn(listChildCategoryId, pageRequest);
 
     if (!CollectionUtils.isEmpty(productPage.getContent())) {
       productPage.getContent()
