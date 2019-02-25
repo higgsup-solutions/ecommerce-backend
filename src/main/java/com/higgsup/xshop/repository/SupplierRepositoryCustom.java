@@ -9,4 +9,6 @@ public interface SupplierRepositoryCustom {
 
   List<SupplierFilterDTO> getDistinctSupplierByCriteria(
       ProductCriteriaDTO criteria);
+
+  List<SupplierFilterDTO> getDistinctSupplierByCategory(List<Integer> category);
 }
