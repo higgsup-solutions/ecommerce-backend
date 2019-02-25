@@ -1,11 +1,13 @@
 package com.higgsup.xshop.controller;
 
 import com.higgsup.xshop.common.ProductStatus;
-import com.higgsup.xshop.dto.*;
+import com.higgsup.xshop.dto.ProductDetailDTO;
+import com.higgsup.xshop.dto.RelatedProductDTO;
+import com.higgsup.xshop.dto.ProductCriteriaDTO;
+import com.higgsup.xshop.dto.ProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.IProductService;
-import com.higgsup.xshop.service.IReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +27,9 @@ public class ProductController {
 
   private final IProductService productService;
 
-  private final IReviewService reviewService;
-
   public ProductController(
-      IProductService productService,
-      IReviewService reviewService) {
+      IProductService productService) {
     this.productService = productService;
-    this.reviewService = reviewService;
   }
 
   @GetMapping("/top-sale")
