@@ -1,5 +1,6 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.dto.RatingDTO;
 import com.higgsup.xshop.dto.ReviewDTO;
 import com.higgsup.xshop.entity.Review;
 import com.higgsup.xshop.repository.ReviewRepository;
@@ -44,5 +45,10 @@ public class ReviewService implements IReviewService {
       reviewDTOS.add(reviewDTO);
     });
     return reviewDTOS;
+  }
+
+  @Override
+  public List<RatingDTO> countRatingByProductId(Integer productId) {
+    return this.reviewRepository.countRatingByProductId(productId);
   }
 }

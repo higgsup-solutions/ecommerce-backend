@@ -1,6 +1,7 @@
 package com.higgsup.xshop.common;
 
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.ProductDetailDTO;
 import com.higgsup.xshop.entity.Product;
 import org.springframework.beans.BeanUtils;
 
@@ -21,5 +22,15 @@ public class DataUtil {
     String[] imgUrls = product.getImgUrl().split(";");
     productDTO.setMainImgUrl(imgUrls[0]);
     return productDTO;
+  }
+
+  public static ProductDetailDTO mapProductDetailDTO(Product product) {
+    ProductDetailDTO result = new ProductDetailDTO();
+    BeanUtils.copyProperties(product, result);
+    result.setCategoryId(product.getCategory().getId());
+    result.setSupplierId(product.getSupplier().getId());
+    result.setSupplierName(product.getSupplier().getName());
+    result.setSupplierAddress(product.getSupplier().getAddress());
+    return result;
   }
 }

@@ -1,15 +1,15 @@
 package com.higgsup.xshop.service.impl;
 
-import com.higgsup.xshop.common.ConstantNumber;
 import com.higgsup.xshop.common.DataUtil;
+import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.common.ProductStatus;
-import com.higgsup.xshop.dto.ProductCriteriaDTO;
-import com.higgsup.xshop.dto.ProductDTO;
-import com.higgsup.xshop.dto.RelatedProductDTO;
+import com.higgsup.xshop.dto.*;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.entity.Product;
+import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.ProductRepository;
+import com.higgsup.xshop.repository.ReviewRepository;
 import com.higgsup.xshop.service.IProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.higgsup.xshop.common.ConstantNumber.NUMBER_OF_RELATED_PRODUCT;
 import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX;
@@ -36,11 +37,15 @@ public class ProductService implements IProductService {
 
   private final CategoryService categoryService;
 
+  private final ReviewRepository reviewRepository;
+
   public ProductService(
       ProductRepository productRepository,
-      CategoryService categoryService) {
+      CategoryService categoryService,
+      ReviewRepository reviewRepository) {
     this.productRepository = productRepository;
     this.categoryService = categoryService;
+    this.reviewRepository = reviewRepository;
   }
 
   @Override
@@ -77,7 +82,8 @@ public class ProductService implements IProductService {
 
       if (!CollectionUtils.isEmpty(productPage.getContent())) {
         productPage.getContent()
-            .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
+            .forEach(
+                product -> productDTOs.add(DataUtil.mapProductDTO(product)));
       }
     }
 
@@ -152,9 +158,10 @@ public class ProductService implements IProductService {
   }
 
   private Specification<Product> buildCriteriaTextSearch(String textSearch) {
-    return (root, query, cb) -> cb.or(cb.like(root.get("name"), '%' + textSearch + '%'),
-        cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
-        cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
+    return (root, query, cb) -> cb
+        .or(cb.like(root.get("name"), '%' + textSearch + '%'),
+            cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
+            cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
   }
 
   private Specification<Product> buildCriteriaSupplier(Integer supplierId) {
@@ -162,19 +169,21 @@ public class ProductService implements IProductService {
   }
 
   private Specification<Product> buildCriteriaStatus(ProductStatus status) {
-    return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("status"), status);
+    return (root, query, cb) -> cb
+        .lessThanOrEqualTo(root.get("status"), status);
   }
 
   private Specification<Product> buildCriteriaAvgRating(Integer avgRating) {
-    return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("avgRating"), avgRating);
+    return (root, query, cb) -> cb
+        .greaterThanOrEqualTo(root.get("avgRating"), avgRating);
   }
 
   private Specification<Product> buildCriteriaUnitPrice(
       BigDecimal fromUnitPrice, BigDecimal toUnitPrice) {
-    return (root, query, cb) -> cb.and(cb.lessThanOrEqualTo(root.get("unitPrice"), toUnitPrice),
-        cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
+    return (root, query, cb) -> cb
+        .and(cb.lessThanOrEqualTo(root.get("unitPrice"), toUnitPrice),
+            cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
   }
-
 
   private RelatedProductDTO convertEntityToRelatedProductDTO(Product product) {
     RelatedProductDTO relatedProductDTO = new RelatedProductDTO();
@@ -201,6 +210,28 @@ public class ProductService implements IProductService {
     return criteria.getAvgRating() == null;
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public IPagedResponse<ProductDetailDTO> getProductDetail(Integer productId) {
 
+    ResponseMessage<ProductDetailDTO> responseMessage = new ResponseMessage<>();
+    IPagedResponse<ProductDetailDTO> iPagedResponse = new IPagedResponse<>(
+        responseMessage);
+
+    Optional<Product> product = this.productRepository.findProductById(productId);
+
+    ProductDetailDTO result = DataUtil.mapProductDetailDTO(product
+        .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "product not found")));
+
+    List<RatingDTO> ratingCount = this.reviewRepository.countRatingByProductId(productId);
+
+    if(!ratingCount.isEmpty()){
+      result.setRatingCount(ratingCount);
+    }
+
+    responseMessage.setData(result);
+
+    return iPagedResponse;
+  }
 
 }

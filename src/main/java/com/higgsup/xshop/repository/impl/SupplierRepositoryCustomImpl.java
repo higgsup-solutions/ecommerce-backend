@@ -16,8 +16,8 @@ import java.util.List;
 @Repository
 public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
 
-  private final EntityManager entityManager;
 
+  private final EntityManager entityManager;
   public SupplierRepositoryCustomImpl(
       EntityManager entityManager) {
     this.entityManager = entityManager;
