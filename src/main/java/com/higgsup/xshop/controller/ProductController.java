@@ -79,18 +79,9 @@ public class ProductController {
   @ApiOperation(value = "API get product detail")
   public ResponseEntity<IPagedResponse<ProductDetailDTO>> getProductDetail(
       @PathVariable("id") Integer productId) {
-
     IPagedResponse<ProductDetailDTO> result = this.productService
         .getProductDetail(productId);
-
     return ResponseEntity.ok(result);
-  }
-
-  @GetMapping("/test")
-  @ApiOperation(value = "API get product detail")
-  public ResponseEntity<List<RatingDTO>> test() {
-
-    return ResponseEntity.ok(this.reviewService.countRatingByProductId(2570));
   }
 
 }
