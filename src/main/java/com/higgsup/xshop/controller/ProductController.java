@@ -1,14 +1,14 @@
 package com.higgsup.xshop.controller;
 
 import com.higgsup.xshop.common.ProductStatus;
-import com.higgsup.xshop.dto.ProductCriteriaDTO;
-import com.higgsup.xshop.dto.ProductDTO;
-import com.higgsup.xshop.dto.RelatedProductDTO;
+import com.higgsup.xshop.dto.*;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.service.IProductService;
+import com.higgsup.xshop.service.IReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +25,13 @@ public class ProductController {
 
   private final IProductService productService;
 
+  private final IReviewService reviewService;
+
   public ProductController(
-      IProductService productService) {
+      IProductService productService,
+      IReviewService reviewService) {
     this.productService = productService;
+    this.reviewService = reviewService;
   }
 
   @GetMapping("/top-sale")
@@ -57,18 +61,36 @@ public class ProductController {
     criteria.setToUnitPrice(toUnitPrice);
     criteria.setAvgRating(avgRating);
     criteria.setStatus(status);
-
     return productService.searchProduct(criteria, pageSize, pageIndex);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id}/relation")
   @ApiOperation(value = "API get related products")
   public ResponseMessage<List<RelatedProductDTO>> getRelatedProduct(
       @PathVariable("id") Integer id) {
     ResponseMessage<List<RelatedProductDTO>> responseMessage = new ResponseMessage<>();
-
-    List<RelatedProductDTO> relatedProducts = productService.getRelatedProduct(id);
+    List<RelatedProductDTO> relatedProducts = productService
+        .getRelatedProduct(id);
     responseMessage.setData(relatedProducts);
     return responseMessage;
   }
+
+  @GetMapping("/{id}")
+  @ApiOperation(value = "API get product detail")
+  public ResponseEntity<IPagedResponse<ProductDetailDTO>> getProductDetail(
+      @PathVariable("id") Integer productId) {
+
+    IPagedResponse<ProductDetailDTO> result = this.productService
+        .getProductDetail(productId);
+
+    return ResponseEntity.ok(result);
+  }
+
+  @GetMapping("/test")
+  @ApiOperation(value = "API get product detail")
+  public ResponseEntity<List<RatingDTO>> test() {
+
+    return ResponseEntity.ok(this.reviewService.countRatingByProductId(2570));
+  }
+
 }

@@ -2,6 +2,7 @@ package com.higgsup.xshop.service;
 
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.ProductDetailDTO;
 import com.higgsup.xshop.dto.RelatedProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 
@@ -14,4 +15,6 @@ public interface IProductService {
       int pageSize, int pageIndex);
 
   List<RelatedProductDTO> getRelatedProduct(Integer productId);
+
+  IPagedResponse<ProductDetailDTO> getProductDetail(Integer productId);
 }
