@@ -7,4 +7,7 @@ import java.util.List;
 public interface CategoryRepositoryCustom {
 
   List<BreadcrumbDTO> searchBreadcrumbByCategoryId(Integer categoryId);
+
+  List<Integer> getListChildCategory(Integer categoryId);
+
 }

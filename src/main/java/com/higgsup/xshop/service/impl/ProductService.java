@@ -34,9 +34,13 @@ public class ProductService implements IProductService {
 
   private final ProductRepository productRepository;
 
+  private final CategoryService categoryService;
+
   public ProductService(
-      ProductRepository productRepository) {
+      ProductRepository productRepository,
+      CategoryService categoryService) {
     this.productRepository = productRepository;
+    this.categoryService = categoryService;
   }
 
   @Override
@@ -47,7 +51,7 @@ public class ProductService implements IProductService {
         .of(0, 18, Sort.Direction.DESC, "discountPercent");
     Page<Product> products = productRepository.findAll(pageRequest);
     products.getContent()
-        .forEach(product -> productDTOs.add(mapProductDTO(product)));
+        .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
     return productDTOs;
   }
 
@@ -73,7 +77,7 @@ public class ProductService implements IProductService {
 
       if (!CollectionUtils.isEmpty(productPage.getContent())) {
         productPage.getContent()
-            .forEach(product -> productDTOs.add(mapProductDTO(product)));
+            .forEach(product -> productDTOs.add(DataUtil.mapProductDTO(product)));
       }
     }
 
@@ -171,13 +175,6 @@ public class ProductService implements IProductService {
         cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
   }
 
-  private ProductDTO mapProductDTO(Product product) {
-    ProductDTO productDTO = new ProductDTO();
-    BeanUtils.copyProperties(product, productDTO);
-    String[] imgUrls = product.getImgUrl().split(";");
-    productDTO.setMailImgUrl(imgUrls[0]);
-    return productDTO;
-  }
 
   private RelatedProductDTO convertEntityToRelatedProductDTO(Product product) {
     RelatedProductDTO relatedProductDTO = new RelatedProductDTO();
@@ -203,5 +200,7 @@ public class ProductService implements IProductService {
     }
     return criteria.getAvgRating() == null;
   }
+
+
 
 }

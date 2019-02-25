@@ -45,4 +45,25 @@ public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
         .setParameter("categoryId", categoryId);
     return new JpaResultConverter().list(query, BreadcrumbDTO.class);
   }
+
+  @Override
+  public List<Integer> getListChildCategory(Integer categoryId) {
+    String sql =
+        "with recursive ptc (id, parent_id) as ("
+            + "  select     id,"
+            + "             parent_id"
+            + "  from       category"
+            + "  where      parent_id = :categoryId"
+            + "  union all"
+            + "  select     c.id,"
+            + "             c.parent_id"
+            + "  from       category c"
+            + "  inner join ptc"
+            + "          on c.parent_id = ptc.id"
+            + ")"
+            + "select distinct id from (select * from ptc) as temp;";
+    Query query = entityManager.createNativeQuery(sql)
+        .setParameter("categoryId", categoryId);
+    return query.getResultList();
+  }
 }
