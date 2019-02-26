@@ -3,7 +3,11 @@ package com.higgsup.xshop.service.impl;
 import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.common.ProductStatus;
-import com.higgsup.xshop.dto.*;
+import com.higgsup.xshop.dto.ProductCriteriaDTO;
+import com.higgsup.xshop.dto.ProductDTO;
+import com.higgsup.xshop.dto.ProductDetailDTO;
+import com.higgsup.xshop.dto.RatingDTO;
+import com.higgsup.xshop.dto.RelatedProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
 import com.higgsup.xshop.entity.Product;
@@ -165,12 +169,12 @@ public class ProductService implements IProductService {
   }
 
   private Specification<Product> buildCriteriaSupplier(Integer supplierId) {
-    return (root, query, cb) -> cb.equal(root.get("supplierId"), supplierId);
+    return (root, query, cb) -> cb.equal(root.get("supplier"), supplierId);
   }
 
   private Specification<Product> buildCriteriaStatus(ProductStatus status) {
     return (root, query, cb) -> cb
-        .lessThanOrEqualTo(root.get("status"), status);
+        .equal(root.get("status"), status);
   }
 
   private Specification<Product> buildCriteriaAvgRating(Integer avgRating) {
