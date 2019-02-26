@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>,
-    JpaSpecificationExecutor<Product> {
+    JpaSpecificationExecutor<Product>, ProductRepositoryCustom {
 
   Page<Product> findAllByCategory_Id(Integer category_id, Pageable pageRequest);
 

@@ -2,7 +2,6 @@ package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.DataUtil;
 import com.higgsup.xshop.common.ErrorCode;
-import com.higgsup.xshop.common.ProductStatus;
 import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
 import com.higgsup.xshop.dto.ProductDetailDTO;
@@ -20,13 +19,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,12 +72,9 @@ public class ProductService implements IProductService {
     List<ProductDTO> productDTOs = new ArrayList<>();
 
     if (!isEmptyCriteria(criteria)) {
-      Pageable pageRequest = PageRequest
-          .of(pageIndex, pageSize, Sort.Direction.ASC, "unitPrice");
 
       Page<Product> productPage = productRepository
-          .findAll(Specification.where(buildCriteria(criteria)), pageRequest);
-
+          .searchByCriteria(criteria, pageIndex, pageSize);
       iPagedResponse.setTotalItem(productPage.getTotalElements());
       iPagedResponse.setTotalPage(productPage.getTotalPages());
 
@@ -115,78 +109,6 @@ public class ProductService implements IProductService {
         .add(convertEntityToRelatedProductDTO(product)));
 
     return relatedProductDTOS;
-  }
-
-  private Specification<Product> buildCriteria(ProductCriteriaDTO criteria) {
-    Specification<Product> conditionWhere = Specification.where(
-        (
-            (root, query, cb) -> cb.conjunction()
-        ));
-
-    if (!StringUtils.isEmpty(criteria.getTextSearch())) {
-      String textSearch = criteria.getTextSearch().trim();
-      textSearch = DataUtil.removeAccent(textSearch);
-      conditionWhere = Specification.where(conditionWhere).and(
-          buildCriteriaTextSearch(StringUtils.replace(textSearch, "d", "đ")))
-          .or(buildCriteriaTextSearch(
-              StringUtils.replace(textSearch, "đ", "d")));
-    }
-
-    if (criteria.getAvgRating() != null) {
-      Integer avgRating = criteria.getAvgRating();
-      conditionWhere = Specification.where(conditionWhere)
-          .and(buildCriteriaAvgRating(avgRating));
-    }
-
-    if (criteria.getSupplierId() != null) {
-      Integer supplierId = criteria.getSupplierId();
-      conditionWhere = Specification.where(conditionWhere)
-          .and(buildCriteriaSupplier(supplierId));
-    }
-
-    if (criteria.getStatus() != null) {
-      ProductStatus status = criteria.getStatus();
-      conditionWhere = Specification.where(conditionWhere)
-          .and(buildCriteriaStatus(status));
-    }
-
-    if (criteria.getFromUnitPrice() != null
-        && criteria.getToUnitPrice() != null) {
-      BigDecimal fromUnitPrice = criteria.getFromUnitPrice();
-      BigDecimal toUnitPrice = criteria.getToUnitPrice();
-      conditionWhere = Specification.where(conditionWhere)
-          .and(buildCriteriaUnitPrice(fromUnitPrice, toUnitPrice));
-    }
-
-    return conditionWhere;
-  }
-
-  private Specification<Product> buildCriteriaTextSearch(String textSearch) {
-    return (root, query, cb) -> cb
-        .or(cb.like(root.get("name"), '%' + textSearch + '%'),
-            cb.like(root.get("shortDesc"), '%' + textSearch + '%'),
-            cb.like(root.get("fullDesc"), '%' + textSearch + '%'));
-  }
-
-  private Specification<Product> buildCriteriaSupplier(Integer supplierId) {
-    return (root, query, cb) -> cb.equal(root.get("supplier"), supplierId);
-  }
-
-  private Specification<Product> buildCriteriaStatus(ProductStatus status) {
-    return (root, query, cb) -> cb
-        .equal(root.get("status"), status);
-  }
-
-  private Specification<Product> buildCriteriaAvgRating(Integer avgRating) {
-    return (root, query, cb) -> cb
-        .greaterThanOrEqualTo(root.get("avgRating"), avgRating);
-  }
-
-  private Specification<Product> buildCriteriaUnitPrice(
-      BigDecimal fromUnitPrice, BigDecimal toUnitPrice) {
-    return (root, query, cb) -> cb
-        .and(cb.lessThanOrEqualTo(root.get("unitPrice"), toUnitPrice),
-            cb.greaterThanOrEqualTo(root.get("unitPrice"), fromUnitPrice));
   }
 
   private RelatedProductDTO convertEntityToRelatedProductDTO(Product product) {

@@ -49,10 +49,11 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
     if (criteria.getStatus() != null) {
       sql.append(" and status = :status ");
     }
-    if (criteria.getFromUnitPrice() != null
-        && criteria.getToUnitPrice() != null) {
-      sql.append(" unit_price >= :fromUnitPrice ");
-      sql.append(" unit_price <= :toUnitPrice ");
+    if (criteria.getFromUnitPrice() != null) {
+      sql.append(" and unit_price >= :fromUnitPrice ");
+    }
+    if (criteria.getToUnitPrice() != null) {
+      sql.append(" and unit_price <= :toUnitPrice ");
     }
     sql.append(" ) ");
 
@@ -73,9 +74,10 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
     if (criteria.getStatus() != null) {
       query.setParameter("status", criteria.getStatus().name());
     }
-    if (criteria.getFromUnitPrice() != null
-        && criteria.getToUnitPrice() != null) {
+    if (criteria.getFromUnitPrice() != null) {
       query.setParameter("fromUnitPrice", criteria.getFromUnitPrice());
+    }
+    if (criteria.getToUnitPrice() != null) {
       query.setParameter("toUnitPrice", criteria.getToUnitPrice());
     }
 
