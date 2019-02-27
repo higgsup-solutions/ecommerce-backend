@@ -39,6 +39,13 @@ public class UserService implements IUserService {
     userRole.setRole(UserRole.MEMBER);
     user.setRole(userRole);
     user.setPassword(encoder.encode(user.getPassword()));
+    User oldUser = userRepository.findByEmail(user.getEmail());
+
+    if (oldUser != null) {
+      throw new BusinessException(ErrorCode.USER_EMAIL_EXISTED,
+          ErrorCode.USER_EMAIL_EXISTED.getErrorMessage());
+    }
+
     try {
       result = userRepository.save(user);
     } catch (Exception e) {

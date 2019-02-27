@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.sql.Timestamp;
 
 @Entity
@@ -46,6 +47,7 @@ public class Cart {
   private Timestamp updatedDate;
 
   @Column(name = "VERSION")
+  @Version
   private Integer version;
 
 }
