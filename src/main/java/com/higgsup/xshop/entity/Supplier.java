@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.sql.Timestamp;
 
 @Entity
@@ -35,6 +36,7 @@ public class Supplier {
   private Timestamp updatedDate;
 
   @Column(name = "VERSION")
+  @Version
   private Integer version;
 
 }

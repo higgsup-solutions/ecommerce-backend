@@ -21,7 +21,10 @@ public enum ErrorCode {
       "Amount product greater than available product"),
 
   //Product error
-  PRODUCT_NOT_FOUND(13, "Product not found");
+  PRODUCT_NOT_FOUND(13, "Product not found"),
+
+  //User error
+  USER_EMAIL_EXISTED(14, "User email existed.");
 
   private int errorCode;
 
