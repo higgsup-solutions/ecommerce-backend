@@ -43,7 +43,6 @@ public class UserToken {
   @CreationTimestamp
   private Timestamp updatedDate;
 
-  @Column(name = "VERSION")
   @Version
   private Integer version;
 }

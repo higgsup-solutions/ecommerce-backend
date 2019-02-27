@@ -73,7 +73,6 @@ public class Product {
   @CreationTimestamp
   private Timestamp updatedDate;
 
-  @Column(name = "VERSION")
   @Version
   private Integer version;
 
