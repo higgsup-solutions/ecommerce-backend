@@ -129,6 +129,8 @@ public class CartService implements ICartService {
         cartDetailDTO.setUnitPrice(product.getUnitPrice());
         cartDetailDTO.setDiscountPercent(product.getDiscountPercent());
         cartDetailDTO.setSupplierName(product.getSupplier().getName());
+        String[] imgUrls = product.getImgUrl().split(";");
+        cartDetailDTO.setImgUrl(imgUrls[0]);
 
         cartDetailDTOs.add(cartDetailDTO);
       });

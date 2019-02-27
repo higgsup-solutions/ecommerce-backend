@@ -12,6 +12,8 @@ public class CartDetailDTO {
 
   private String productName;
 
+  private String imgUrl;
+
   private Integer amount;
 
   private BigDecimal unitPrice;
