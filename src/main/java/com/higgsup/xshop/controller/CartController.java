@@ -31,11 +31,12 @@ public class CartController {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ApiOperation(value = "API update cart")
-  public ResponseMessage<CartDTO> updateCart (@PathVariable Integer id, @RequestBody CartDTO cartDTO){
+  public IPagedResponse<CartDTO> updateCart(@PathVariable Integer id,
+      @RequestBody CartDTO cartDTO) {
     ResponseMessage<CartDTO> responseMessage = new ResponseMessage<>();
     CartDTO responseCartDTO = cartService.updateCart(id, cartDTO.getAmount());
     responseMessage.setData(responseCartDTO);
-    return responseMessage;
+    return new IPagedResponse<>(responseMessage);
   }
 
   @GetMapping(value = "/total-item")
