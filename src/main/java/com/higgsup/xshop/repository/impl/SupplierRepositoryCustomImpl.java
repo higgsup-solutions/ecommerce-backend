@@ -32,16 +32,8 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
     sql.append("where id in ( ");
     sql.append(" select distinct supplier_id from product where 1 = 1 ");
     if (!StringUtils.isEmpty(criteria.getTextSearch())) {
-      sql.append("and (");
-      sql.append("  ( upper(name) like :textSearch1 ");
-      sql.append("    or upper(short_desc) like :textSearch1 ");
-      sql.append("    or upper(full_desc) like :textSearch1 ");
-      sql.append("  ) or ");
-      sql.append("  ( upper(name) like :textSearch2 ");
-      sql.append("    or upper(short_desc) like :textSearch2 ");
-      sql.append("    or upper(full_desc) like :textSearch2 ");
-      sql.append("  ) ");
-      sql.append(" ) ");
+      sql.append(
+          " and match(name, short_desc, full_desc) against(:textSearch in boolean mode) ");
     }
     if (criteria.getAvgRating() != null) {
       sql.append(" and avg_rating >= :avgRating ");
@@ -59,14 +51,11 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
 
     Query query = entityManager.createNativeQuery(sql.toString());
     if (!StringUtils.isEmpty(criteria.getTextSearch())) {
-      String textSearch =
-          "%" + DataUtil.removeAccent(criteria.getTextSearch()).toUpperCase()
-              + "%";
-      query.setParameter("textSearch1",
-          StringUtils.replace(textSearch, "D", "Đ"));
-      query.setParameter("textSearch2",
-          StringUtils.replace(textSearch, "Đ", "D"));
-
+      String textSearch = DataUtil.removeAccent(criteria.getTextSearch())
+          .toLowerCase();
+      String textSearch1 = StringUtils.replace(textSearch, "d", "đ");
+      String textSearch2 = StringUtils.replace(textSearch, "đ", "d");
+      query.setParameter("textSearch", textSearch1 + " " + textSearch2);
     }
     if (criteria.getAvgRating() != null) {
       query.setParameter("avgRating", criteria.getAvgRating());
