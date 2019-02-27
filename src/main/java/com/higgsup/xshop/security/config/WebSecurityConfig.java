@@ -112,7 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     config.setAllowedMethods(Arrays
         .asList(applicationSecurityProperty.getCors().getAllowedMethod()));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/api/**", config);
+    source.registerCorsConfiguration("/**", config);
 
     return new CustomCorsFilter(source);
   }
