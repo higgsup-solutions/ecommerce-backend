@@ -35,7 +35,6 @@ public class Supplier {
   @CreationTimestamp
   private Timestamp updatedDate;
 
-  @Column(name = "VERSION")
   @Version
   private Integer version;
 

@@ -48,7 +48,6 @@ public class User {
   @CreationTimestamp
   private Timestamp updatedDate;
 
-  @Column(name = "VERSION")
   @Version
   private Integer version;
 
