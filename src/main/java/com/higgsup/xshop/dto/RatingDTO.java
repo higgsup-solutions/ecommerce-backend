@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 @Data
@@ -12,7 +11,7 @@ import java.math.BigInteger;
 @Getter
 public class RatingDTO {
 
-  private BigDecimal rating;
+  private Short rating;
 
   private BigInteger counting;
 

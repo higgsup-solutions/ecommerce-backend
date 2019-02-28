@@ -18,5 +18,5 @@ public class ProductDTO {
 
   private Float avgRating;
 
-  private Long totalRating;
+  private Integer totalRating;
 }
