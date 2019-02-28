@@ -2,11 +2,15 @@ package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.ErrorCode;
 import com.higgsup.xshop.common.UserRole;
+import com.higgsup.xshop.common.WebUtil;
+import com.higgsup.xshop.dto.UserDTO;
 import com.higgsup.xshop.entity.Role;
 import com.higgsup.xshop.entity.User;
 import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.UserRepository;
+import com.higgsup.xshop.security.model.UserContext;
 import com.higgsup.xshop.service.IUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,4 +58,13 @@ public class UserService implements IUserService {
     return result;
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public UserDTO getCurrentUserInfo() {
+    UserContext userContext = WebUtil.getCurrentUser();
+    User user = userRepository.getOne(userContext.getUserId());
+    UserDTO userDTO = new UserDTO();
+    BeanUtils.copyProperties(user, userDTO);
+    return userDTO;
+  }
 }
