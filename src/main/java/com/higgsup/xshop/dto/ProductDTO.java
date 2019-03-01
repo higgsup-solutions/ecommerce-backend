@@ -12,6 +12,8 @@ public class ProductDTO {
 
   private BigDecimal unitPrice;
 
+  private BigDecimal discountPrice;
+
   private Float discountPercent;
 
   private String mainImgUrl;

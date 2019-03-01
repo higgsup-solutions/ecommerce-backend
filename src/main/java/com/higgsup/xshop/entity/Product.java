@@ -53,6 +53,9 @@ public class Product {
   @Column(name = "UNIT_PRICE")
   private BigDecimal unitPrice;
 
+  @Column(name = "DISCOUNT_PRICE")
+  private BigDecimal discountPrice;
+
   @Column(name = "DISCOUNT_PERCENT")
   private Float discountPercent;
 
