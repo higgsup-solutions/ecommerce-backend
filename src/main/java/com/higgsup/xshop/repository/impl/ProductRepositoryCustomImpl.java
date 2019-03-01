@@ -35,7 +35,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     StringBuilder conditionWhere = buildCondition(criteria);
 
     Query queryData = entityManager.createNativeQuery(
-        sqlData.append(conditionWhere).append(" order by unit_price ")
+        sqlData.append(conditionWhere).append(" order by discount_price ")
             .toString(), Product.class);
     setParameter(queryData, criteria);
     queryData.setFirstResult(pageSize * pageIndex + 1);
@@ -49,7 +49,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     BigInteger totalSize = (BigInteger) queryCount.getSingleResult();
     Pageable pageRequest = PageRequest
-        .of(pageIndex, pageSize, Sort.Direction.ASC, "unitPrice");
+        .of(pageIndex, pageSize, Sort.Direction.ASC, "discountPrice");
 
     return new PageImpl<>(dataList, pageRequest, totalSize.longValue());
 
