@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -78,6 +79,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     if (criteria.getToUnitPrice() != null) {
       query.setParameter("toUnitPrice", criteria.getToUnitPrice());
     }
+    if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
+      query.setParameter("categoryIds", criteria.getCategoryIds());
+    }
   }
 
   private StringBuilder buildCondition(ProductCriteriaDTO criteria) {
@@ -100,6 +104,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     }
     if (criteria.getToUnitPrice() != null) {
       conditionWhere.append("and unit_price <= :toUnitPrice ");
+    }
+    if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
+      conditionWhere.append("and category_id in :categoryIds ");
     }
 
     return conditionWhere;
