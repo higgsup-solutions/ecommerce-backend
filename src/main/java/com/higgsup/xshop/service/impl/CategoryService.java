@@ -71,6 +71,11 @@ public class CategoryService implements ICategoryService {
   }
 
   @Override
+  public List<Integer> getListChildCategory(Integer categoryId) {
+    return this.categoryRepository.getListChildCategory(categoryId);
+  }
+
+  @Override
   @Transactional(readOnly = true)
   public IPagedResponse<List<ProductDTO>> getListProductsByCategoryId(
       Integer categoryId, int pageSize, int pageIndex) {

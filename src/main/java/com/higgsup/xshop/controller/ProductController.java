@@ -7,6 +7,7 @@ import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.ProductDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
+import com.higgsup.xshop.service.ICategoryService;
 import com.higgsup.xshop.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,9 +28,13 @@ public class ProductController {
 
   private final IProductService productService;
 
+  private final ICategoryService categoryService;
+
   public ProductController(
-      IProductService productService) {
+      IProductService productService,
+      ICategoryService categoryService) {
     this.productService = productService;
+    this.categoryService = categoryService;
   }
 
   @GetMapping("/top-sale")
@@ -49,6 +54,7 @@ public class ProductController {
       @RequestParam(value = "toUnitPrice", required = false) BigDecimal toUnitPrice,
       @RequestParam(value = "avgRating", required = false) Integer avgRating,
       @RequestParam(value = "status", required = false) ProductStatus status,
+      @RequestParam(value = "categoryId", required = false) Integer categoryId,
       @RequestParam("pageIndex") Integer pageIndex,
       @RequestParam("pageSize") Integer pageSize
   ) {
@@ -59,6 +65,15 @@ public class ProductController {
     criteria.setToUnitPrice(toUnitPrice);
     criteria.setAvgRating(avgRating);
     criteria.setStatus(status);
+
+    if (categoryId != null) {
+      List<Integer> listCategoryIds;
+      listCategoryIds = this.categoryService
+          .getListChildCategory(categoryId);
+      listCategoryIds.add(categoryId);
+      criteria.setCategoryIds(listCategoryIds);
+    }
+
     return productService.searchProduct(criteria, pageSize, pageIndex);
   }
 

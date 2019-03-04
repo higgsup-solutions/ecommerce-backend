@@ -16,4 +16,6 @@ public interface ICategoryService {
 
   List<BreadcrumbDTO> getBreadcrumbByProductId(Integer productId);
 
+  List<Integer> getListChildCategory(Integer categoryId);
+
 }
