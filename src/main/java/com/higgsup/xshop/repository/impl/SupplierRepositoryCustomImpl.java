@@ -7,6 +7,7 @@ import com.higgsup.xshop.dto.SupplierFilterDTO;
 import com.higgsup.xshop.repository.SupplierRepositoryCustom;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -47,6 +48,9 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
     if (criteria.getToUnitPrice() != null) {
       sql.append(" and unit_price <= :toUnitPrice ");
     }
+    if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
+      sql.append("and category_id in :categoryIds ");
+    }
     sql.append(" ) ");
 
     Query query = entityManager.createNativeQuery(sql.toString());
@@ -68,6 +72,9 @@ public class SupplierRepositoryCustomImpl implements SupplierRepositoryCustom {
     }
     if (criteria.getToUnitPrice() != null) {
       query.setParameter("toUnitPrice", criteria.getToUnitPrice());
+    }
+    if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
+      query.setParameter("categoryIds", criteria.getCategoryIds());
     }
 
     return new JpaResultConverter().list(query, SupplierFilterDTO.class);
