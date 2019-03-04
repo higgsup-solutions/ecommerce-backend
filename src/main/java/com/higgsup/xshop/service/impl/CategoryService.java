@@ -21,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -41,6 +42,28 @@ public class CategoryService implements ICategoryService {
     List<BreadcrumbDTO> result;
     try {
       result = this.categoryRepository.searchBreadcrumbByCategoryId(categoryId);
+    } catch (Exception e) {
+      throw new BusinessException(ErrorCode.GLOBAL, "System error");
+    }
+    return result;
+  }
+
+  @Override
+  public List<BreadcrumbDTO> getBreadcrumbByProductId(
+      Integer productId) {
+
+    List<BreadcrumbDTO> result;
+
+    Optional<Product> productOptional = this.productRepository
+        .findById(productId);
+
+    Product product = productOptional
+        .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND,
+            ErrorCode.PRODUCT_NOT_FOUND.getErrorMessage()));
+
+    try {
+      result = this.categoryRepository
+          .searchBreadcrumbByCategoryId(product.getCategory().getId());
     } catch (Exception e) {
       throw new BusinessException(ErrorCode.GLOBAL, "System error");
     }
