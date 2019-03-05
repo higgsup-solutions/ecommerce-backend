@@ -50,6 +50,9 @@ public class Product {
   @Column(name = "AVAILABLE_ITEM")
   private Integer availableItem;
 
+  @Column(name = "TEMP_ITEM")
+  private Integer tempItem;
+
   @Column(name = "UNIT_PRICE")
   private BigDecimal unitPrice;
 
