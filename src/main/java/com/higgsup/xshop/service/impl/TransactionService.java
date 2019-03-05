@@ -48,14 +48,13 @@ public class TransactionService implements ITransactionService {
     Integer userId = userContext.getUserId();
 
     BeanUtils.copyProperties(transactionDTO, transaction);
-    transaction.setUser(userRepository.getOne(userId));
     transactionRepository.save(transaction);
 
     List<Cart> carts = cartRepository.findByUserId(userId);
 
-    for (Cart cart: carts){
+    for (Cart cart : carts){
       Optional<Product> product = productRepository.findById(cart.getProduct().getId());
-      Integer currentItem = product.get().getAvailableItem();
+      Integer currentItem = product.get().getTempItem();
       Integer remainingItem = currentItem - cart.getAmount();
 
       product.get().setAvailableItem(remainingItem);
