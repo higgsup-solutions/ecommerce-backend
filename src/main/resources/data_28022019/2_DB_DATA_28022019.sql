@@ -6,6 +6,9 @@ delete from product;
 delete from supplier;
 delete from category;
 
+
+
+
 INSERT INTO supplier (id, name, address, `version`) values (1, 'FPT Shop', 'Duy Tân, Hà Nội', 0);
 INSERT INTO supplier (id, name, address, `version`) values (2, 'Xiamoi', 'Anhui, China', 0);
 INSERT INTO supplier (id, name, address, `version`) values (3, 'Thế Giới Di Động', 'Hà Nội', 0);
@@ -11390,6 +11393,8 @@ INSERT INTO review (id, product_id, reviewer, rating, `comment`) VALUES(48390, 4
 INSERT INTO review (id, product_id, reviewer, rating, `comment`) VALUES(48391, 4839, 'mai V.', 2, 'sản phẩm dùng rất ok');
 
 INSERT INTO review (id, product_id, reviewer, rating, `comment`) VALUES(48392, 4839, 'Vân A.', 4, 'Giao hàng nhanh, uy tín chất lượng.');
+
+update product set discount_price = (unit_price - ((unit_price*discount_percent)/100));
 
 update cart set updated_date = current_date;
 update category set updated_date = current_date;
