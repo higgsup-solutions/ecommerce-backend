@@ -10,8 +10,12 @@ public interface ICategoryService {
 
   List<BreadcrumbDTO> getBreadcrumbByCategoryId(Integer categoryId);
 
-  IPagedResponse<List<ProductDTO>> getListProductsByCategoryId(Integer categoryId,
+  IPagedResponse<List<ProductDTO>> getListProductsByCategoryId(
+      Integer categoryId,
       int pageSize, int pageIndex);
 
+  List<BreadcrumbDTO> getBreadcrumbByProductId(Integer productId);
+
+  List<Integer> getListChildCategory(Integer categoryId);
 
 }

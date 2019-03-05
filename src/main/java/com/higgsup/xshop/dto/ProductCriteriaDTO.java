@@ -4,6 +4,7 @@ import com.higgsup.xshop.common.ProductStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductCriteriaDTO {
@@ -18,4 +19,6 @@ public class ProductCriteriaDTO {
   private Integer avgRating;
 
   private ProductStatus status;
+
+  private List<Integer> categoryIds;
 }

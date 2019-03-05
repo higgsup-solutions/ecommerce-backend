@@ -24,9 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.higgsup.xshop.common.ConstantNumber.NUMBER_OF_RELATED_PRODUCT;
 import static com.higgsup.xshop.common.ConstantNumber.PAGE_INDEX;
@@ -144,20 +147,37 @@ public class ProductService implements IProductService {
     IPagedResponse<ProductDetailDTO> iPagedResponse = new IPagedResponse<>(
         responseMessage);
 
-    Optional<Product> product = this.productRepository.findProductById(productId);
+    Optional<Product> product = this.productRepository
+        .findProductById(productId);
 
     ProductDetailDTO result = DataUtil.mapProductDetailDTO(product
-        .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND, "product not found")));
+        .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND,
+            "product not found")));
 
-    List<RatingDTO> ratingCount = this.reviewRepository.countRatingByProductId(productId);
+    List<RatingDTO> ratingCount = this.getProductRating(productId);
 
-    if(!ratingCount.isEmpty()){
+    if (!ratingCount.isEmpty()) {
       result.setRatingCount(ratingCount);
     }
 
     responseMessage.setData(result);
 
     return iPagedResponse;
+  }
+
+  private List<RatingDTO> getProductRating(Integer productId) {
+    List<RatingDTO> result = new ArrayList<>();
+
+    List<RatingDTO> listRating = this.reviewRepository
+        .countRatingByProductId(productId);
+
+    Map<Short, BigInteger> tempMap = listRating.stream().collect(
+        Collectors.toMap(RatingDTO::getRating, RatingDTO::getCounting));
+
+    for (Short i = 1; i <= 5; i++) {
+      result.add(new RatingDTO(i, tempMap.getOrDefault(i, BigInteger.ZERO)));
+    }
+    return result;
   }
 
 }

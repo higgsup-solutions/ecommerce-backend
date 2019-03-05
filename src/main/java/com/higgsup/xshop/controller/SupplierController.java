@@ -5,6 +5,7 @@ import com.higgsup.xshop.dto.ProductCriteriaDTO;
 import com.higgsup.xshop.dto.SupplierFilterDTO;
 import com.higgsup.xshop.dto.base.IPagedResponse;
 import com.higgsup.xshop.dto.base.ResponseMessage;
+import com.higgsup.xshop.service.ICategoryService;
 import com.higgsup.xshop.service.ISupplierService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +24,13 @@ public class SupplierController {
 
   private final ISupplierService supplierService;
 
+  private final ICategoryService categoryService;
+
   public SupplierController(
-      ISupplierService supplierService) {
+      ISupplierService supplierService,
+      ICategoryService categoryService) {
     this.supplierService = supplierService;
+    this.categoryService = categoryService;
   }
 
   @GetMapping
@@ -37,6 +42,7 @@ public class SupplierController {
       @RequestParam(value = "fromUnitPrice", required = false) BigDecimal fromUnitPrice,
       @RequestParam(value = "toUnitPrice", required = false) BigDecimal toUnitPrice,
       @RequestParam(value = "avgRating", required = false) Integer avgRating,
+      @RequestParam(value = "categoryId", required = false) Integer categoryId,
       @RequestParam(value = "status", required = false) ProductStatus status
   ) {
     ProductCriteriaDTO criteria = new ProductCriteriaDTO();
@@ -46,6 +52,14 @@ public class SupplierController {
     criteria.setToUnitPrice(toUnitPrice);
     criteria.setAvgRating(avgRating);
     criteria.setStatus(status);
+
+    if (categoryId != null) {
+      List<Integer> listCategoryIds;
+      listCategoryIds = this.categoryService
+          .getListChildCategory(categoryId);
+      listCategoryIds.add(categoryId);
+      criteria.setCategoryIds(listCategoryIds);
+    }
 
     ResponseMessage<List<SupplierFilterDTO>> responseMessage = new ResponseMessage<>();
     responseMessage

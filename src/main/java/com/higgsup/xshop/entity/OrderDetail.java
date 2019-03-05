@@ -8,35 +8,46 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "TRANSACTION")
+@Table(name = "ORDER_DETAIL")
 @Data
-public class Transaction {
+public class OrderDetail {
 
   @Id
   @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @Column(name = "PAYPAL_ORDER_ID")
-  private String paypalOrderId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID")
+  private Product product;
 
-  @Column(name = "PAYPAL_TRANSACTION_ID")
-  private String paypalTransactionId;
+  @Column(name = "QUANTITY")
+  private Integer quantity;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "STATUS")
   private PayPalTransactionStatus status;
 
-  @Column(name = "XSHOP_ORDER_ID")
-  private Integer xshopOrderId;
+  @Column(name = "DELIVERY_TIME")
+  private Timestamp deliveryTime;
+
+  @Column(name = "UNIT_PRICE")
+  private BigDecimal unitPrice;
+
+  @Column(name = "DISCOUNT_PERCENT")
+  private Float discountPercent;
 
   @Column(name = "CREATED_DATE")
   @CreationTimestamp
@@ -48,5 +59,4 @@ public class Transaction {
 
   @Version
   private Integer version;
-
 }

@@ -1,6 +1,6 @@
 package com.higgsup.xshop.entity;
 
-import com.higgsup.xshop.common.PayPalTransactionStatus;
+import com.higgsup.xshop.common.AddressType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,27 +16,29 @@ import javax.persistence.Version;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "TRANSACTION")
+@Table(name = "ORDER_ADDRESS")
 @Data
-public class Transaction {
-
+public class OrderAddress {
   @Id
   @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @Column(name = "PAYPAL_ORDER_ID")
-  private String paypalOrderId;
+  @Column(name = "ORDER_ID")
+  private Integer orderId;
 
-  @Column(name = "PAYPAL_TRANSACTION_ID")
-  private String paypalTransactionId;
+  @Column(name = "BUYER_NAME")
+  private String buyerName;
 
+  @Column(name = "PHONE")
+  private String phone;
+
+  @Column(name = "ADDRESS")
+  private String address;
+
+  @Column(name = "TYPE")
   @Enumerated(EnumType.STRING)
-  @Column(name = "STATUS")
-  private PayPalTransactionStatus status;
-
-  @Column(name = "XSHOP_ORDER_ID")
-  private Integer xshopOrderId;
+  private AddressType type;
 
   @Column(name = "CREATED_DATE")
   @CreationTimestamp
@@ -48,5 +50,4 @@ public class Transaction {
 
   @Version
   private Integer version;
-
 }
