@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ import javax.persistence.Version;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ORDER_DETAIL")
+@Table(name = "ORDER_ADDRESS")
 @Data
 public class OrderAddress {
   @Id
@@ -35,6 +37,7 @@ public class OrderAddress {
   private String address;
 
   @Column(name = "TYPE")
+  @Enumerated(EnumType.STRING)
   private AddressType type;
 
   @Column(name = "CREATED_DATE")

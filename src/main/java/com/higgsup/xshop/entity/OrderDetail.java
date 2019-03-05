@@ -43,8 +43,8 @@ public class OrderDetail {
   @Column(name = "DELIVERY_TIME")
   private Timestamp deliveryTime;
 
-  @Column(name = "DISCOUNT_PRICE")
-  private BigDecimal discountPrice;
+  @Column(name = "UNIT_PRICE")
+  private BigDecimal unitPrice;
 
   @Column(name = "DISCOUNT_PERCENT")
   private Float discountPercent;
