@@ -100,7 +100,7 @@ CREATE TABLE `product` (
   `version` int(11) DEFAULT NULL,
   `img_url` text COLLATE utf8_unicode_ci,
   `total_rating` int(11) DEFAULT NULL,
-  `tempt_item` int(11) DEFAULT NULL,
+  `temp_item` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   KEY `supplier_id` (`supplier_id`)
