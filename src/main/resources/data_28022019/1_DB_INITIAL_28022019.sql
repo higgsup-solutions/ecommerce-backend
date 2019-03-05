@@ -293,15 +293,3 @@ CREATE TABLE `order_address` (
   KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-
-
-
-
-
-
-
-
-
-
-
