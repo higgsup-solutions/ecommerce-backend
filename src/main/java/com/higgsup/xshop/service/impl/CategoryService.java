@@ -96,7 +96,7 @@ public class CategoryService implements ICategoryService {
     listChildCategoryId.add(categoryId);
 
     productPage = this.productRepository
-        .findProductsByIdIn(listChildCategoryId, pageRequest);
+        .findProductsByCategoryIdIn(listChildCategoryId, pageRequest);
 
     if (!CollectionUtils.isEmpty(productPage.getContent())) {
       productPage.getContent()
