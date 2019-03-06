@@ -1,5 +1,6 @@
 package com.higgsup.xshop.dto;
 
+import com.higgsup.xshop.common.AddressType;
 import com.higgsup.xshop.common.OrderStatus;
 import lombok.Data;
 
@@ -13,4 +14,8 @@ public class OrderDTO {
   private BigDecimal totalAmount;
   private BigDecimal discountAmount;
   private BigDecimal shippingFee;
+  private String buyer_name;
+  private String phone;
+  private String address;
+  private AddressType type;
 }

@@ -25,9 +25,7 @@ public class OrderController {
   @ApiOperation(value = "API create an order ", response = IPagedResponse.class)
   IPagedResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
     ResponseMessage<OrderDTO> responseMessage = new ResponseMessage<>();
-
     OrderDTO result = orderService.createOrder(orderDTO);
-
     responseMessage.setData(result);
     return new IPagedResponse<>(responseMessage);
   }
