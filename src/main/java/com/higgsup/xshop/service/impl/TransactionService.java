@@ -1,5 +1,6 @@
 package com.higgsup.xshop.service.impl;
 
+import com.higgsup.xshop.common.PayPalTransactionStatus;
 import com.higgsup.xshop.common.WebUtil;
 import com.higgsup.xshop.dto.TransactionDTO;
 import com.higgsup.xshop.entity.Cart;
@@ -54,10 +55,9 @@ public class TransactionService implements ITransactionService {
 
     for (Cart cart : carts){
       Optional<Product> product = productRepository.findById(cart.getProduct().getId());
-      Integer currentItem = product.get().getTempItem();
-      Integer remainingItem = currentItem - cart.getAmount();
 
-      product.get().setAvailableItem(remainingItem);
+      Integer tempItem = product.get().getTempItem();
+      product.get().setTempItem(tempItem - cart.getAmount());
       productRepository.save(product.get());
     }
     cartRepository.deleteCartsByUserId(userId);
