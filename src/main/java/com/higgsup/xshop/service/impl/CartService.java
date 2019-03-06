@@ -72,7 +72,7 @@ public class CartService implements ICartService {
       cart.setAmount(cart.getAmount() + cartAddDTO.getAmount());
     }
 
-    if (product.getAvailableItem() < cart.getAmount()) {
+    if (product.getTempItem() < cart.getAmount()) {
       throw new BusinessException(
           ErrorCode.AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT,
           ErrorCode.AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT.getErrorMessage());
@@ -99,6 +99,12 @@ public class CartService implements ICartService {
       cart.setAmount(amount);
       cartRepository.save(cart);
       BeanUtils.copyProperties(cart, cartDTO);
+
+      if (cart.getProduct().getTempItem() < cart.getAmount()) {
+        throw new BusinessException(
+            ErrorCode.AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT,
+            ErrorCode.AMOUNT_GREATER_THAN_AVAILABLE_PRODUCT.getErrorMessage());
+      }
     }
     return cartDTO;
   }
