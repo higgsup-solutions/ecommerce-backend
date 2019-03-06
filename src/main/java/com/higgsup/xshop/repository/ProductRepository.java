@@ -22,4 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,
   @Query(value="SELECT DISTINCT p FROM Product p INNER JOIN FETCH p.supplier sp WHERE p.id = :productId")
   Optional<Product> findProductById(@Param("productId") Integer productId);
 
+  Optional<Product> findById(Integer productId);
+
 }
