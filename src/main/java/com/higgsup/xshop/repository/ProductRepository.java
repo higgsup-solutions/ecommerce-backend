@@ -16,7 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,
 
   Page<Product> findAllByCategory_Id(Integer category_id, Pageable pageRequest);
 
-  Page<Product> findProductsByIdIn(List<Integer> listIds, Pageable pageRequest);
+  Page<Product> findProductsByCategoryIdIn(List<Integer> listIds,
+      Pageable pageRequest);
 
   @Query(value="SELECT DISTINCT p FROM Product p INNER JOIN FETCH p.supplier sp WHERE p.id = :productId")
   Optional<Product> findProductById(@Param("productId") Integer productId);
