@@ -10,7 +10,8 @@ ALTER TABLE `user_token` ADD CONSTRAINT `user_token_ibfk_1` FOREIGN KEY (`user_i
 ALTER TABLE `order` ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `order` (`id`);
 ALTER TABLE `transaction` ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`xshop_order_id`) REFERENCES `order` (`id`);
 ALTER TABLE `order_detail` ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
-ALTER TABLE `order_address` ADD CONSTRAINT `order_address_ibfk_1` FOREIGN KEY (`order_address`) REFERENCES `order` (`id`);
+ALTER TABLE `order_detail` ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`);
+ALTER TABLE `order_address` ADD CONSTRAINT `order_address_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`);
 
 SET foreign_key_checks = 1;
 

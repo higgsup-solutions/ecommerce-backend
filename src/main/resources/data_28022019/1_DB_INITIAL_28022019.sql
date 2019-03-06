@@ -258,6 +258,7 @@ DROP TABLE IF EXISTS `order_detail`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int (11) NOT NUll,
   `product_id` int(11)  NOT NULL,
   `quantity` int(11) NOT NULL,
   `status` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -268,7 +269,8 @@ CREATE TABLE `order_detail` (
   `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`)
+  KEY `product_id` (`product_id`),
+  KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
