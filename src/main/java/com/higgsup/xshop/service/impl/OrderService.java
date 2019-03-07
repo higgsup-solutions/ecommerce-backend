@@ -2,17 +2,14 @@ package com.higgsup.xshop.service.impl;
 
 import com.higgsup.xshop.common.WebUtil;
 import com.higgsup.xshop.dto.OrderDTO;
-import com.higgsup.xshop.entity.Order;
-import com.higgsup.xshop.entity.OrderAddress;
-import com.higgsup.xshop.entity.User;
-import com.higgsup.xshop.repository.OrderAddressRepository;
-import com.higgsup.xshop.repository.OrderRepository;
-import com.higgsup.xshop.repository.UserRepository;
+import com.higgsup.xshop.entity.*;
+import com.higgsup.xshop.repository.*;
 import com.higgsup.xshop.security.model.UserContext;
 import com.higgsup.xshop.service.IOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,14 +18,20 @@ public class OrderService implements IOrderService {
   private OrderRepository orderRepository;
   private OrderAddressRepository orderAddressRepository;
   private UserRepository userRepository;
+  private CartRepository cartRepository;
+  private ProductRepository productRepository;
 
   public OrderService(
       OrderRepository orderRepository,
       OrderAddressRepository orderAddressRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      CartRepository cartRepository,
+      ProductRepository productRepository) {
     this.orderRepository = orderRepository;
     this.orderAddressRepository = orderAddressRepository;
     this.userRepository = userRepository;
+    this.cartRepository = cartRepository;
+    this.productRepository = productRepository;
   }
 
   @Override
@@ -46,6 +49,17 @@ public class OrderService implements IOrderService {
     orderRepository.save(order);
     orderDTO.setId(order.getId());
     orderDTO.setUserId(userId);
+
+    List<Cart> carts = cartRepository.findByUserId(userId);
+
+    for (Cart cart : carts){
+      Optional<Product> product = productRepository.findById(cart.getProduct().getId());
+
+      Integer tempItem = product.get().getTempItem();
+      product.get().setTempItem(tempItem - cart.getAmount());
+      productRepository.save(product.get());
+    }
+    cartRepository.deleteCartsByUserId(userId);
 
     orderAddress.setOrderId(order.getId());
     orderAddress.setAddress(orderDTO.getAddress());
