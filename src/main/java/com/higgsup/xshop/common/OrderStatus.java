@@ -1,5 +1,5 @@
 package com.higgsup.xshop.common;
 
 public enum OrderStatus {
-  CANCELED, ON_HOLD, PROCESS, SHIPPING, DELIVERED
+  CANCELED, WAIT_FOR_PAY, PROCESS, SHIPPING, DELIVERED
 }
