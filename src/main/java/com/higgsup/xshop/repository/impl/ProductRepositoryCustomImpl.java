@@ -39,7 +39,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         sqlData.append(conditionWhere).append(" order by discount_price ")
             .toString(), Product.class);
     setParameter(queryData, criteria);
-    queryData.setFirstResult(pageSize * pageIndex + 1);
+    queryData.setFirstResult(pageSize * pageIndex);
     queryData.setMaxResults(pageSize);
 
     List<Product> dataList = queryData.getResultList();
