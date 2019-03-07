@@ -1,6 +1,6 @@
 package com.higgsup.xshop.entity;
 
-import com.higgsup.xshop.common.PayPalTransactionStatus;
+import com.higgsup.xshop.common.OrderStatus;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,12 +33,16 @@ public class OrderDetail {
   @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID")
   private Product product;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ORDER_ID", referencedColumnName = "ID")
+  private Order order;
+
   @Column(name = "QUANTITY")
   private Integer quantity;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "STATUS")
-  private PayPalTransactionStatus status;
+  private OrderStatus status;
 
   @Column(name = "DELIVERY_TIME")
   private Timestamp deliveryTime;
