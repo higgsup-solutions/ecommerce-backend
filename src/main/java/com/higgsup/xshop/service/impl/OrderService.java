@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.higgsup.xshop.common.ApplicationConstant.TIME_CANCEL_ORDER;
+
 @Service
 public class OrderService implements IOrderService {
 
@@ -140,6 +142,48 @@ public class OrderService implements IOrderService {
 
     cartRepository.deleteAll(carts);
 
+  }
+
+  @Override
+  @Transactional(rollbackFor = Exception.class)
+  public void cancelOrderWaitPayment() {
+    List<Order> orders = orderRepository.findByStatus(OrderStatus.WAIT_FOR_PAY);
+    if (CollectionUtils.isEmpty(orders)) {
+      List<Order> ordersCancel = new ArrayList<>();
+      List<Integer> idsOrder = new ArrayList<>();
+      orders.forEach(order -> {
+        Long currentTime = System.currentTimeMillis();
+        long time = currentTime - order.getCreatedDate().getTime();
+        if (time > TIME_CANCEL_ORDER) {
+          order.setStatus(OrderStatus.CANCELED);
+          ordersCancel.add(order);
+          idsOrder.add(order.getId());
+        }
+      });
+
+      if (CollectionUtils.isEmpty(idsOrder)) {
+        return;
+      }
+
+      List<OrderDetail> orderDetailsCancel = orderDetailRepository
+          .findByOrderIdIn(idsOrder);
+
+      List<Product> products = new ArrayList<>();
+      orderDetailsCancel.forEach(orderDetail -> {
+        orderDetail.setStatus(OrderStatus.CANCELED);
+        Product product = orderDetail.getProduct();
+        Integer tempItem = product.getTempItem();
+        product.setTempItem(tempItem + orderDetail.getQuantity());
+        products.add(product);
+      });
+
+      productRepository.saveAll(products);
+
+      orderDetailRepository.saveAll(orderDetailsCancel);
+
+      orderRepository.saveAll(ordersCancel);
+
+    }
   }
 
   private void saveOrderAddress(List<OrderAddressDTO> orderAddressDTOs,

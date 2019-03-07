@@ -23,7 +23,7 @@ public class OrderController {
 
   @PostMapping
   @ApiOperation(value = "API create an order ", response = IPagedResponse.class)
-  IPagedResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+  public IPagedResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
     orderService.createOrder(orderDTO);
     return new IPagedResponse<>(new ResponseMessage<>());
   }
