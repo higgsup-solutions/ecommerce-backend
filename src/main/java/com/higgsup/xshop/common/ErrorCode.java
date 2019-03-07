@@ -24,7 +24,10 @@ public enum ErrorCode {
   PRODUCT_NOT_FOUND(13, "Product not found"),
 
   //User error
-  USER_EMAIL_EXISTED(14, "User email existed.");
+  USER_EMAIL_EXISTED(14, "User email existed."),
+
+  //ORDER ERROR
+  ORDER_NOT_FOUND(15, "Order not found.");
 
   private int errorCode;
 
