@@ -1,21 +1,18 @@
 package com.higgsup.xshop.dto;
 
-import com.higgsup.xshop.common.AddressType;
-import com.higgsup.xshop.common.OrderStatus;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class OrderDTO {
-  private Integer id;
-  private Integer userId;
-  private OrderStatus status;
-  private BigDecimal totalAmount;
-  private BigDecimal discountAmount;
+
+  @NotNull(message = "Shipping fee is required")
   private BigDecimal shippingFee;
-  private String buyer_name;
-  private String phone;
-  private String address;
-  private AddressType type;
+
+  @NotEmpty(message = "Address is required")
+  private List<OrderAddressDTO> address;
 }
