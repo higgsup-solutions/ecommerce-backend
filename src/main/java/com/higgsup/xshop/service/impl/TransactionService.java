@@ -58,13 +58,12 @@ public class TransactionService implements ITransactionService {
   @Override
   @Transactional
   public void createTransaction(TransactionDTO transactionDTO) {
-    Transaction transaction = new Transaction();
 
     UserContext userContext = WebUtil.getCurrentUser();
 
     Integer userId = userContext.getUserId();
     Optional<Order> orderOptional = orderRepository
-        .findById(transaction.getXshopOrderId());
+        .findById(transactionDTO.getXshopOrderId());
 
     Order order = orderOptional.orElseThrow(
         () -> new BusinessException(ErrorCode.ORDER_NOT_FOUND,
@@ -94,6 +93,7 @@ public class TransactionService implements ITransactionService {
 
     productRepository.saveAll(products);
 
+    Transaction transaction = new Transaction();
     BeanUtils.copyProperties(transactionDTO, transaction);
     transactionRepository.save(transaction);
 

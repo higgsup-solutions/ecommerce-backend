@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "USER_ORDER")
 @Data
 public class Order {
 
