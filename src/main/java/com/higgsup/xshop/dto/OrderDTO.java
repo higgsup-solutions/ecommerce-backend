@@ -1,20 +1,18 @@
 package com.higgsup.xshop.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class OrderDTO {
 
-  private Integer id;
+  @NotNull(message = "Shipping fee is required")
+  private BigDecimal shippingFee;
 
-  private Timestamp createDate;
-
-  private List<OrderProductDTO> listProduct;
-
-
+  @NotEmpty(message = "Address is required")
+  private List<OrderAddressDTO> address;
 }

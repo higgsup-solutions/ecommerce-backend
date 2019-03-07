@@ -11395,6 +11395,8 @@ INSERT INTO review (id, product_id, reviewer, rating, `comment`) VALUES(48391, 4
 
 INSERT INTO review (id, product_id, reviewer, rating, `comment`) VALUES(48392, 4839, 'Vân A.', 4, 'Giao hàng nhanh, uy tín chất lượng.');
 
+INSERT INTO role (id, role) VALUES(1, 'MEMBER');
+
 update product set discount_price = (unit_price - ((unit_price*discount_percent)/100));
 
 update cart set updated_date = current_date;
