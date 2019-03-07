@@ -13,4 +13,6 @@ public interface IOrderService {
       int pageSize, int pageIndex);
 
   void createOrder(OrderDTO orderDTO);
+
+  void cancelOrderWaitPayment();
 }

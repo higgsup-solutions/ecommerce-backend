@@ -1,5 +1,6 @@
 package com.higgsup.xshop.repository;
 
+import com.higgsup.xshop.common.OrderStatus;
 import com.higgsup.xshop.entity.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, OrderRes
 
     Page<Order> findAllByUserId(Integer userId, Pageable pageable);
 
+  List<Order> findByStatus(OrderStatus status);
 }
