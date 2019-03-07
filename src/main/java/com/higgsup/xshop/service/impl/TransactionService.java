@@ -6,6 +6,7 @@ import com.higgsup.xshop.common.WebUtil;
 import com.higgsup.xshop.dto.TransactionDTO;
 import com.higgsup.xshop.entity.Order;
 import com.higgsup.xshop.entity.OrderDetail;
+import com.higgsup.xshop.entity.Product;
 import com.higgsup.xshop.entity.Transaction;
 import com.higgsup.xshop.exception.BusinessException;
 import com.higgsup.xshop.repository.CartRepository;
@@ -20,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,11 +80,19 @@ public class TransactionService implements ITransactionService {
 
     List<OrderDetail> orderDetails = orderDetailRepository
         .findByOrderId(order.getId());
+
+    List<Product> products = new ArrayList<>();
     orderDetails.forEach(orderDetail -> {
       orderDetail.setStatus(OrderStatus.PROCESS);
+      Product product = orderDetail.getProduct();
+      product.setAvailableItem(
+          product.getAvailableItem() - orderDetail.getQuantity());
+      products.add(product);
     });
 
     orderDetailRepository.saveAll(orderDetails);
+
+    productRepository.saveAll(products);
 
     BeanUtils.copyProperties(transactionDTO, transaction);
     transactionRepository.save(transaction);
