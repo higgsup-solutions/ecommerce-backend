@@ -19,7 +19,7 @@
 -- Table structure for table `cart`
 --
 
-USE `x_shop`;
+USE `x_shop_v2`;
 
 DROP TABLE IF EXISTS `cart`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -209,10 +209,10 @@ CREATE TABLE `user_token` (
 -- Table structure for table `order`
 --
 
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `user_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `order` (
+CREATE TABLE `user_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `status` varchar(45) COLLATE utf8_unicode_ci NOT NULL,

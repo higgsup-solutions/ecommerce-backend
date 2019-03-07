@@ -1,10 +1,11 @@
-USE x_shop;
+USE x_shop_v2;
 
 delete from cart;
 delete from review;
 delete from product;
 delete from supplier;
 delete from category;
+
 
 
 
